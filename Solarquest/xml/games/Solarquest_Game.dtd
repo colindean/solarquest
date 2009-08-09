@@ -1,0 +1,39 @@
+<!ELEMENT game (defaultRuleSet,defaultView,board,cards)>
+<!ATTLIST game id ID #REQUIRED>
+
+<!ELEMENT defaultRuleSet (#PCDATA)>
+
+<!ELEMENT defaultView (#PCDATA)>
+
+<!ELEMENT board (node*)>
+
+<!ELEMENT node (nodeType,nodeDest+,startNode?,deed?,action?)>
+<!ATTLIST node id ID #REQUIRED>
+
+<!ELEMENT nodeType (#PCDATA)>
+
+<!ELEMENT nodeDest (#PCDATA)>
+
+<!ELEMENT startNode EMPTY>
+
+<!ELEMENT deed (deedPrice,deedGroup,deedRent+,deedFuel*)>
+
+<!ELEMENT deedPrice (#PCDATA)>
+
+<!ELEMENT deedGroup (#PCDATA)>
+
+<!ELEMENT deedRent (#PCDATA)>
+
+<!ELEMENT deedFuel (#PCDATA)>
+
+<!ELEMENT action (actionType,actionValue?)>
+
+<!ELEMENT actionType (#PCDATA)>
+
+<!ELEMENT actionValue (#PCDATA)>
+
+<!ELEMENT cards (card*)>
+
+<!ELEMENT card (action+)>
+<!ATTLIST card id ID #REQUIRED>
+<!ATTLIST card count CDATA "1">

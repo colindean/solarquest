@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 6.0//EN" "http://java.sun.com/dtd/JNLP-6.0.dtd">
+<jnlp spec="1.6+" codebase="http://www.crappycomic.com/solarquest" href="solarquest.jnlp">
+  <information>
+    <title>Solarquest</title>
+    <vendor>Colin Bartolome</vendor>
+  </information>
+  <security>
+    <all-permissions />
+  </security>
+  <resources>
+    <jar href="solarquest.jar" />
+    <j2se version="1.6+" />
+  </resources>
+  <application-desc main-class="com.crappycomic.solarquest.main.Main" />
+</jnlp>

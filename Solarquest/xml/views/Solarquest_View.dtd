@@ -1,0 +1,19 @@
+<!ELEMENT view (boardImage,nodeView*,deedGroupView*,cardView*)>
+<!ATTLIST view id ID #REQUIRED>
+
+<!ELEMENT boardImage (#PCDATA)>
+
+<!ELEMENT nodeView (displayName,coords)>
+<!ATTLIST nodeView for CDATA #REQUIRED>
+
+<!ELEMENT displayName (#PCDATA)>
+
+<!ELEMENT coords (#PCDATA)>
+
+<!ELEMENT deedGroupView (displayName,displayColor)>
+<!ATTLIST deedGroupView for CDATA #REQUIRED>
+
+<!ELEMENT displayColor (#PCDATA)>
+
+<!ELEMENT cardView (displayName)>
+<!ATTLIST cardView for CDATA #REQUIRED>

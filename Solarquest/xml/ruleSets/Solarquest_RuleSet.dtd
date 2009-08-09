@@ -1,0 +1,8 @@
+<!ELEMENT ruleSet (rule)*>
+<!ATTLIST ruleSet id ID #REQUIRED>
+
+<!ELEMENT rule (ruleName,ruleValue)>
+
+<!ELEMENT ruleName (#PCDATA)>
+
+<!ELEMENT ruleValue (#PCDATA)>
