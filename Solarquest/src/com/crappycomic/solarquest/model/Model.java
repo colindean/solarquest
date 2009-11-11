@@ -271,6 +271,9 @@ public abstract class Model implements Serializable
       return node.getOwner() != null && node.canHaveFuelStation() && !node.hasFuelStation()
          && player.getFuel() <= getLowFuel() && !player.equals(node.getOwner())
          && (player.getCash() >= node.getPrice() || isTradeAllowed(player));
+      // TODO isTradeAllowed clause allowed takeover despite insufficient funds
+      // need separate way to determine whether pre-land is required that includes this clause
+      // while the button itself excludes it
    }
 
    public void setRuleSet(RuleSet ruleSet)

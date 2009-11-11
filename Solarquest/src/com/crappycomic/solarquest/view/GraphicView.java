@@ -386,13 +386,13 @@ public class GraphicView extends View
    @Override
    protected void tradeAccepted(Trade trade)
    {
-      statusPanel.appendText(trade.getTo() + " accepted " + trade.getFrom() + "'s trade.");
+      statusPanel.appendText(trade.getTo() + " accepted " + trade.getFrom() + "'s trade."); // TODO replace with names
    }
 
    @Override
    protected void tradeRejected(Trade trade)
    {
-      statusPanel.appendText(trade.getTo() + " rejected " + trade.getFrom() + "'s trade.");
+      statusPanel.appendText(trade.getTo() + " rejected " + trade.getFrom() + "'s trade."); // TODO replace with names
    }
    
    @Override

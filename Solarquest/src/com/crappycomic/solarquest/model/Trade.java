@@ -76,6 +76,8 @@ public class Trade implements Serializable
       return cash;
    }
 
+   // TODO make this better
+   @Override
    public String toString()
    {
       StringBuilder rtn = new StringBuilder();
