@@ -11,9 +11,11 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <javaElement handleIdentifier="=Solarquest/src"/>
-        <folder path="/Solarquest/images"/>
         <folder path="/Solarquest/xml"/>
+        <file path="/Solarquest/gpl.txt"/>
+        <file path="/Solarquest/README.txt"/>
+        <file path="/Solarquest/LICENSE.txt"/>
+        <folder path="/Solarquest/images"/>
+        <javaElement handleIdentifier="=Solarquest/src"/>
     </selectedElements>
-    <fatjar builder="org.eclipse.jdt.ui.plain_jar_builder" launchConfig=""/>
 </jardesc>
