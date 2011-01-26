@@ -17,6 +17,10 @@ public class Main
 {
    public static void main(String[] args)
    {
+      System.out.println("Solarquest");
+      System.out.println("Copyright (C) 2011 Colin Bartolome");
+      System.out.println("Licensed under the GPL. See LICENSE.txt for details.");
+
       final JFrame frame = new JFrame("Solarquest");
       JButton button;
       
