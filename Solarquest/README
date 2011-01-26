@@ -1,8 +1,0 @@
-Note: Solarquest is free software. The code is public domain; do with it
-whatever you'd like.
-
-Instructions for running:
-
-Double-clicking the JAR or running it as below should work fine:
-
-java -jar solarquest.jar
