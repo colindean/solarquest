@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -5,6 +9,8 @@ import java.util.*;
 
 public class Board implements Serializable
 {
+   private static final long serialVersionUID = 0;
+
    private Map<String, Node> nodes = new TreeMap<String, Node>();
 
    private Node startNode;
@@ -29,7 +35,8 @@ public class Board implements Serializable
    {
       return startNode;
    }
-
+   
+   @Override
    public String toString()
    {
       StringBuilder out = new StringBuilder();

@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import static java.lang.Math.*;
@@ -16,6 +20,8 @@ import com.crappycomic.solarquest.model.*;
 
 public class BoardPanel extends JPanel
 {
+   private static final long serialVersionUID = 0;
+   
    public static final int DEFAULT_WIDTH = 640;
 
    public static final int DEFAULT_HEIGHT = 640;

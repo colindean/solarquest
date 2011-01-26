@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -22,6 +26,8 @@ public class Player implements Serializable
    private Node currentNode;
    
    private Set<Node> ownedNodes = new HashSet<Node>();
+   
+   private transient boolean ownedNodesRehashed;
    
    private Map<String, Integer> groupCounts = new HashMap<String, Integer>();
    
@@ -121,6 +127,14 @@ public class Player implements Serializable
    
    public Set<Node> getOwnedNodes()
    {
+      // This is pretty dumb, but it's a decent enough fix for Java's deserialization woes.
+      // See bug #4957674 on Sun's site.
+      if (!ownedNodesRehashed)
+      {
+         ownedNodes = new HashSet<Node>(ownedNodes);
+         ownedNodesRehashed = true;
+      }
+      
       return Collections.unmodifiableSet(ownedNodes);
    }
    
@@ -158,6 +172,6 @@ public class Player implements Serializable
    @Override
    public String toString()
    {
-      return "Player " + number;
+      return name;
    }
 }

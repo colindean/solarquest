@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.net;
 
 import java.io.*;
@@ -54,7 +58,7 @@ public class DirectServerSideConnection implements ServerSideConnection
             
             if (object instanceof ModelMessage)
                server.receiveMessage(this, (ModelMessage)object);
-            else if (object instanceof Pair)
+            else if (object instanceof Pair<?, ?>)
                server.receivePlayerChoice(this, (Pair<?, ?>)object);
             
             System.out.println("Server received: " + object);

@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -6,8 +10,12 @@ import java.util.*;
 // This is kind of annoying
 public class RuleSet implements Serializable
 {
+   private static final long serialVersionUID = 8303657986331898582L;
+
    public static class Rule<T> implements Serializable
    {
+      private static final long serialVersionUID = -656194308203540151L;
+
       private String name;
       
       private Class<?> type;
@@ -27,7 +35,7 @@ public class RuleSet implements Serializable
       @Override
       public boolean equals(Object other)
       {
-         return (other instanceof Rule) && name.equals(((Rule<?>)other).name);
+         return (other instanceof Rule<?>) && name.equals(((Rule<?>)other).name);
       }
    }
    

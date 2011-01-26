@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import java.awt.*;
@@ -13,6 +17,8 @@ import com.crappycomic.solarquest.model.ModelMessage.Type;
 
 public class ActionsPanel extends JPanel
 {
+   private static final long serialVersionUID = 0;
+   
    private class FuelSpinnerChangeListener implements ChangeListener
    {
       private int fuelPrice;
@@ -138,6 +144,8 @@ public class ActionsPanel extends JPanel
       
       tradeAction = new AbstractAction("Trade")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -157,6 +165,8 @@ public class ActionsPanel extends JPanel
       
       purchaseFuelAction = new AbstractAction()
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -166,6 +176,8 @@ public class ActionsPanel extends JPanel
       
       placeFuelStationAction = new AbstractAction("Place Fuel Station")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -175,6 +187,8 @@ public class ActionsPanel extends JPanel
       
       purchaseFuelStationAction = new AbstractAction("Purchase Fuel Station")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -184,6 +198,8 @@ public class ActionsPanel extends JPanel
       
       Action rollDiceAction = new AbstractAction("Roll Dice")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -213,6 +229,8 @@ public class ActionsPanel extends JPanel
 
       negligenceTakeoverAction = new AbstractAction("Perform Takeover")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -222,6 +240,8 @@ public class ActionsPanel extends JPanel
       
       Action preLandContinueButton = new AbstractAction("Continue")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -241,6 +261,8 @@ public class ActionsPanel extends JPanel
       
       purchaseNodeAction = new AbstractAction("Purchase Property")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -250,6 +272,8 @@ public class ActionsPanel extends JPanel
       
       Action endTurnAction = new AbstractAction("End Turn")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -275,6 +299,8 @@ public class ActionsPanel extends JPanel
       
       Action declareBankruptcyAction = new AbstractAction("Declare Bankruptcy")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -285,6 +311,8 @@ public class ActionsPanel extends JPanel
       
       sellFuelStationAction = new AbstractAction("Sell Fuel Station")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -294,6 +322,8 @@ public class ActionsPanel extends JPanel
       
       sellNodeAction = new AbstractAction("Sell Property")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -325,6 +355,8 @@ public class ActionsPanel extends JPanel
       
       refillToLowFuelAction = new AbstractAction("Refill to " + model.getLowFuel())
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -336,6 +368,8 @@ public class ActionsPanel extends JPanel
       
       finalizeFuelPurchaseAction = new AbstractAction()
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -345,6 +379,8 @@ public class ActionsPanel extends JPanel
       
       Action cancelAction = new AbstractAction("Cancel")
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -373,6 +409,8 @@ public class ActionsPanel extends JPanel
       
       chooseNodeAction = new AbstractAction()
       {
+         private static final long serialVersionUID = 0;
+         
          @Override
          public void actionPerformed(ActionEvent evt)
          {
@@ -613,6 +651,8 @@ public class ActionsPanel extends JPanel
          {
             Action action = new AbstractAction(view.getNodeDisplayName(node.getID()))
             {
+               private static final long serialVersionUID = 0;
+               
                @Override
                public void actionPerformed(ActionEvent evt)
                {

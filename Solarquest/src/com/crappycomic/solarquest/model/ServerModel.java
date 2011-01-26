@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -733,7 +737,7 @@ public class ServerModel extends Model implements Runnable
       
       for (Node node : board.getNodes())
       {
-         if (node.getOwner() == null)
+         if (node.isPurchaseable())
          {
             nodeIsAvailable = true;
             break;

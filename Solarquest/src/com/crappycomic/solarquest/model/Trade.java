@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -75,8 +79,7 @@ public class Trade implements Serializable
    {
       return cash;
    }
-
-   // TODO make this better
+   
    @Override
    public String toString()
    {

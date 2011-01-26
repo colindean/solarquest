@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -178,7 +182,8 @@ public class Node implements Comparable<Node>, Serializable
    {
       return actions;
    }
-
+   
+   @Override
    public String toString()
    {
       StringBuilder out = new StringBuilder();

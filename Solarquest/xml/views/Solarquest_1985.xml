@@ -5,367 +5,367 @@
 
   <nodeView for="Earth">
     <displayName>Earth</displayName>
-    <coords>702 843</coords>
+    <coords>708 860</coords>
   </nodeView>
   <nodeView for="Well_Earth_1">
     <displayName>Earth Gravity Well</displayName>
-    <coords>701 762</coords>
+    <coords>716 778</coords>
   </nodeView>
   <nodeView for="Earth_Moon">
     <displayName>The Moon</displayName>
-    <coords>715 717</coords>
+    <coords>731 731</coords>
   </nodeView>
   <nodeView for="Dock_Solar">
     <displayName>Solar Space Dock</displayName>
-    <coords>736 661</coords>
+    <coords>747 672</coords>
   </nodeView>
   <nodeView for="Mercury">
     <displayName>Mercury</displayName>
-    <coords>772 598</coords>
+    <coords>787 610</coords>
   </nodeView>
   <nodeView for="Station_1">
     <displayName>Federation Station I</displayName>
-    <coords>805 542</coords>
+    <coords>824 549</coords>
   </nodeView>
   <nodeView for="Space_Earth_Jupiter_1">
     <displayName>Interplanetary Space between Earth and Jupiter</displayName>
-    <coords>842 500</coords>
+    <coords>859 511</coords>
   </nodeView>
   <nodeView for="Space_Earth_Jupiter_2">
     <displayName>Interplanetary Space between Earth and Jupiter</displayName>
-    <coords>891 461</coords>
+    <coords>911 474</coords>
   </nodeView>
   <nodeView for="Jupiter_Io">
     <displayName>Io</displayName>
-    <coords>971 432</coords>
+    <coords>989 449</coords>
   </nodeView>
   <nodeView for="Dock_Jupiter">
     <displayName>Jupiter Space Dock</displayName>
-    <coords>1054 418</coords>
+    <coords>1077 426</coords>
   </nodeView>
   <nodeView for="Space_Jupiter_1">
     <displayName>Jupiter Orbit</displayName>
-    <coords>1114 380</coords>
+    <coords>1138 391</coords>
   </nodeView>
   <nodeView for="Jupiter_Elara">
     <displayName>Elara</displayName>
-    <coords>1152 329</coords>
+    <coords>1184 339</coords>
   </nodeView>
   <nodeView for="Jupiter_Callisto">
     <displayName>Callisto</displayName>
-    <coords>1175 254</coords>
+    <coords>1201 251</coords>
   </nodeView>
   <nodeView for="Station_2">
     <displayName>Federation Station II</displayName>
-    <coords>1154 166</coords>
+    <coords>1170 169</coords>
   </nodeView>
   <nodeView for="Jupiter_Thebe">
     <displayName>Thebe</displayName>
-    <coords>1086 98</coords>
+    <coords>1104 106</coords>
   </nodeView>
   <nodeView for="Space_Jupiter_2">
     <displayName>Jupiter Orbit</displayName>
-    <coords>1011 68</coords>
+    <coords>1028 76</coords>
   </nodeView>
   <nodeView for="Jupiter_Metis">
     <displayName>Metis</displayName>
-    <coords>927 60</coords>
+    <coords>944 70</coords>
   </nodeView>
   <nodeView for="Jupiter_Ganymede">
     <displayName>Ganymede</displayName>
-    <coords>819 95</coords>
+    <coords>836 97</coords>
   </nodeView>
   <nodeView for="Lab_Jupiter">
     <displayName>Jupiter Research Lab</displayName>
-    <coords>745 166</coords>
+    <coords>749 168</coords>
   </nodeView>
   <nodeView for="Jupiter_Himalia">
     <displayName>Himalia</displayName>
-    <coords>712 230</coords>
+    <coords>720 233</coords>
   </nodeView>
   <nodeView for="Jupiter_Europa">
     <displayName>Europa</displayName>
-    <coords>721 310</coords>
+    <coords>725 315</coords>
   </nodeView>
   <nodeView for="Jupiter_Amalthea">
     <displayName>Amalthea</displayName>
-    <coords>783 388</coords>
+    <coords>785 401</coords>
   </nodeView>
   <nodeView for="Jupiter_Adrastea">
     <displayName>Adrastea</displayName>
-    <coords>858 424</coords>
+    <coords>873 440</coords>
   </nodeView>
   <nodeView for="Jupiter_Sinope">
     <displayName>Sinope</displayName>
-    <coords>734 106</coords>
+    <coords>750 110</coords>
   </nodeView>
   <nodeView for="Well_Jupiter_1">
     <displayName>Jupiter Gravity Well</displayName>
-    <coords>678 106</coords>
+    <coords>690 110</coords>
   </nodeView>
   <nodeView for="Well_Jupiter_2">
     <displayName>Jupiter Gravity Well</displayName>
-    <coords>624 97</coords>
+    <coords>636 99</coords>
   </nodeView>
   <nodeView for="Well_Jupiter_3">
     <displayName>Jupiter Gravity Well</displayName>
-    <coords>574 80</coords>
+    <coords>585 82</coords>
   </nodeView>
   <nodeView for="Well_Jupiter_4">
     <displayName>Jupiter Gravity Well</displayName>
-    <coords>520 58</coords>
+    <coords>531 59</coords>
   </nodeView>
   <nodeView for="Station_3">
     <displayName>Federation Station III</displayName>
-    <coords>456 56</coords>
+    <coords>469 59</coords>
   </nodeView>
   <nodeView for="Space_Jupiter_Uranus_1">
     <displayName>Interplanetary Space between Jupiter and Uranus</displayName>
-    <coords>412 89</coords>
+    <coords>417 90</coords>
   </nodeView>
   <nodeView for="Uranus_Miranda">
     <displayName>Miranda</displayName>
-    <coords>399 158</coords>
+    <coords>409 161</coords>
   </nodeView>
   <nodeView for="Dock_Uranus">
     <displayName>Uranus Space Dock</displayName>
-    <coords>409 228</coords>
+    <coords>424 237</coords>
   </nodeView>
   <nodeView for="Uranus_Umbriel">
     <displayName>Umbriel</displayName>
-    <coords>387 321</coords>
+    <coords>409 330</coords>
   </nodeView>
   <nodeView for="Uranus_Oberon">
     <displayName>Oberon</displayName>
-    <coords>321 380</coords>
+    <coords>328 392</coords>
   </nodeView>
   <nodeView for="Uranus_Puck">
     <displayName>Puck</displayName>
-    <coords>247 356</coords>
+    <coords>256 362</coords>
   </nodeView>
   <nodeView for="Lab_Uranus">
     <displayName>Uranus Research Lab</displayName>
-    <coords>212 302</coords>
+    <coords>219 302</coords>
   </nodeView>
   <nodeView for="Space_Uranus_1">
     <displayName>Uranus Orbit</displayName>
-    <coords>192 237</coords>
+    <coords>203 241</coords>
   </nodeView>
   <nodeView for="Uranus_Ariel">
     <displayName>Ariel</displayName>
-    <coords>194 152</coords>
+    <coords>196 158</coords>
   </nodeView>
   <nodeView for="Station_4">
     <displayName>Federation Station IV</displayName>
-    <coords>240 75</coords>
+    <coords>231 64</coords>
   </nodeView>
   <nodeView for="Uranus_Titania">
     <displayName>Titania</displayName>
-    <coords>350 75</coords>
+    <coords>368 66</coords>
   </nodeView>
   <nodeView for="Well_Uranus_1">
     <displayName>Uranus Gravity Well</displayName>
-    <coords>171 96</coords>
+    <coords>175 97</coords>
   </nodeView>
   <nodeView for="Well_Uranus_2">
     <displayName>Uranus Gravity Well</displayName>
-    <coords>122 69</coords>
+    <coords>124 71</coords>
   </nodeView>
   <nodeView for="Well_Uranus_3">
     <displayName>Uranus Gravity Well</displayName>
-    <coords>81 117</coords>
+    <coords>81 119</coords>
   </nodeView>
   <nodeView for="Pluto">
     <displayName>Pluto</displayName>
-    <coords>63 188</coords>
+    <coords>64 192</coords>
   </nodeView>
   <nodeView for="Pluto_Charon">
     <displayName>Charon</displayName>
-    <coords>59 257</coords>
+    <coords>57 262</coords>
   </nodeView>
   <nodeView for="Space_Pluto_Mars_1">
     <displayName>Interplenetary Space between Pluto and Mars</displayName>
-    <coords>55 322</coords>
+    <coords>58 329</coords>
   </nodeView>
   <nodeView for="Station_5">
     <displayName>Federation Station V</displayName>
-    <coords>61 376</coords>
+    <coords>67 387</coords>
   </nodeView>
   <nodeView for="Space_Pluto_Mars_2">
     <displayName>Interplenetary Space between Pluto and Mars</displayName>
-    <coords>87 436</coords>
+    <coords>86 448</coords>
   </nodeView>
   <nodeView for="Space_Pluto_Mars_3">
     <displayName>Interplenetary Space between Pluto and Mars</displayName>
-    <coords>131 484</coords>
+    <coords>134 495</coords>
   </nodeView>
   <nodeView for="Mars_Phobos">
     <displayName>Phobos</displayName>
-    <coords>200 488</coords>
+    <coords>208 496</coords>
   </nodeView>
   <nodeView for="Mars">
     <displayName>Mars</displayName>
-    <coords>303 506</coords>
+    <coords>304 512</coords>
   </nodeView>
   <nodeView for="Mars_Deimos">
     <displayName>Deimos</displayName>
-    <coords>357 574</coords>
+    <coords>364 586</coords>
   </nodeView>
   <nodeView for="Space_Mars_Venus_1">
     <displayName>Interplenetary Space between Mars and Venus</displayName>
-    <coords>382 624</coords>
+    <coords>390 636</coords>
   </nodeView>
   <nodeView for="Lab_Venus">
     <displayName>Venus Research Lab</displayName>
-    <coords>406 676</coords>
+    <coords>411 693</coords>
   </nodeView>
   <nodeView for="Venus">
     <displayName>Venus</displayName>
-    <coords>462 762</coords>
+    <coords>471 778</coords>
   </nodeView>
   <nodeView for="Well_Venus_1">
     <displayName>Venus Gravity Well</displayName>
-    <coords>514 854</coords>
+    <coords>524 871</coords>
   </nodeView>
   <nodeView for="Saturn_Phoebe">
     <displayName>Phoebe</displayName>
-    <coords>508 925</coords>
+    <coords>510 944</coords>
   </nodeView>
   <nodeView for="Saturn_Mimas">
     <displayName>Mimas</displayName>
-    <coords>404 935</coords>
+    <coords>412 954</coords>
   </nodeView>
   <nodeView for="Dock_Saturn">
     <displayName>Saturn Space Dock</displayName>
-    <coords>327 900</coords>
+    <coords>331 921</coords>
   </nodeView>
   <nodeView for="Saturn_Dione">
     <displayName>Dione</displayName>
-    <coords>236 880</coords>
+    <coords>242 898</coords>
   </nodeView>
   <nodeView for="Space_Saturn_1">
     <displayName>Saturn Orbit</displayName>
-    <coords>148 879</coords>
+    <coords>149 893</coords>
   </nodeView>
   <nodeView for="Saturn_Iapetus">
     <displayName>Iapetus</displayName>
-    <coords>74 926</coords>
+    <coords>76 945</coords>
   </nodeView>
   <nodeView for="Saturn_Rhea">
     <displayName>Rhea</displayName>
-    <coords>80 1011</coords>
+    <coords>82 1032</coords>
   </nodeView>
   <nodeView for="Saturn_Tethys">
     <displayName>Tethys</displayName>
-    <coords>132 1079</coords>
+    <coords>136 1098</coords>
   </nodeView>
   <nodeView for="Station_6">
     <displayName>Federation Station VI</displayName>
-    <coords>196 1122</coords>
+    <coords>208 1156</coords>
   </nodeView>
   <nodeView for="Saturn_Janus">
     <displayName>Janus</displayName>
-    <coords>282 1168</coords>
+    <coords>288 1190</coords>
   </nodeView>
   <nodeView for="Saturn_Enceladus">
     <displayName>Enceladus</displayName>
-    <coords>373 1193</coords>
+    <coords>381 1218</coords>
   </nodeView>
   <nodeView for="Lab_Saturn">
     <displayName>Saturn Research Lab</displayName>
-    <coords>460 1191</coords>
+    <coords>486 1218</coords>
   </nodeView>
   <nodeView for="Saturn_Hyperion">
     <displayName>Hyperion</displayName>
-    <coords>555 1157</coords>
+    <coords>564 1180</coords>
   </nodeView>
   <nodeView for="Saturn_Titan">
     <displayName>Titan</displayName>
-    <coords>550 1070</coords>
+    <coords>561 1091</coords>
   </nodeView>
   <nodeView for="Station_7">
     <displayName>Federation Station VII</displayName>
-    <coords>500 999</coords>
+    <coords>505 1014</coords>
   </nodeView>
   <nodeView for="Well_Saturn_1">
     <displayName>Saturn Gravity Well</displayName>
-    <coords>581 1114</coords>
+    <coords>597 1139</coords>
   </nodeView>
   <nodeView for="Well_Saturn_2">
     <displayName>Saturn Gravity Well</displayName>
-    <coords>628 1072</coords>
+    <coords>641 1097</coords>
   </nodeView>
   <nodeView for="Well_Saturn_3">
     <displayName>Saturn Gravity Well</displayName>
-    <coords>682 1048</coords>
+    <coords>694 1069</coords>
   </nodeView>
   <nodeView for="Well_Saturn_4">
     <displayName>Saturn Gravity Well</displayName>
-    <coords>737 1035</coords>
+    <coords>751 1055</coords>
   </nodeView>
   <nodeView for="Station_8">
     <displayName>Federation Station VIII</displayName>
-    <coords>797 1039</coords>
+    <coords>814 1062</coords>
   </nodeView>
   <nodeView for="Space_Saturn_Neptune_1">
     <displayName>Interplanetary Space between Saturn and Neptune</displayName>
-    <coords>851 1059</coords>
+    <coords>868 1080</coords>
   </nodeView>
   <nodeView for="Neptune_Nereid">
     <displayName>Nereid</displayName>
-    <coords>918 1106</coords>
+    <coords>936 1129</coords>
   </nodeView>
   <nodeView for="Space_Neptune_1">
     <displayName>Neptune Orbit</displayName>
-    <coords>996 1167</coords>
+    <coords>1017 1186</coords>
   </nodeView>
   <nodeView for="Dock_Neptune">
     <displayName>Neptune Space Dock</displayName>
-    <coords>1084 1166</coords>
+    <coords>1108 1184</coords>
   </nodeView>
   <nodeView for="Space_Neptune_2">
     <displayName>Neptune Orbit</displayName>
-    <coords>1159 1109</coords>
+    <coords>1181 1131</coords>
   </nodeView>
   <nodeView for="Lab_Neptune">
     <displayName>Neptune Research Lab</displayName>
-    <coords>1183 1038</coords>
+    <coords>1208 1061</coords>
   </nodeView>
   <nodeView for="Space_Neptune_3">
     <displayName>Neptune Orbit</displayName>
-    <coords>1172 957</coords>
+    <coords>1194 977</coords>
   </nodeView>
   <nodeView for="Neptune_Triton">
     <displayName>Triton</displayName>
-    <coords>1107 899</coords>
+    <coords>1133 914</coords>
   </nodeView>
   <nodeView for="Station_9">
     <displayName>Federation Station IX</displayName>
-    <coords>1002 882</coords>
+    <coords>1020 904</coords>
   </nodeView>
   <nodeView for="Space_Neptune_4">
     <displayName>Neptune Orbit</displayName>
-    <coords>932 924</coords>
+    <coords>952 940</coords>
   </nodeView>
   <nodeView for="Space_Neptune_5">
     <displayName>Neptune_Orbit</displayName>
-    <coords>894 1002</coords>
+    <coords>909 1032</coords>
   </nodeView>
   <nodeView for="Well_Neptune_1">
     <displayName>Neptune Gravity Well</displayName>
-    <coords>864 961</coords>
+    <coords>879 976</coords>
   </nodeView>
   <nodeView for="Well_Neptune_2">
     <displayName>Neptune Gravity Well</displayName>
-    <coords>811 976</coords>
+    <coords>826 993</coords>
   </nodeView>
   <nodeView for="Well_Neptune_3">
     <displayName>Neptune Gravity Well</displayName>
-    <coords>760 974</coords>
+    <coords>775 992</coords>
   </nodeView>
   <nodeView for="Lab_Earth">
     <displayName>Earth Research Lab</displayName>
-    <coords>711 944</coords>
+    <coords>722 958</coords>
   </nodeView>
 
   <deedGroupView for="Earth">

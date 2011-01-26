@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import java.awt.*;
@@ -12,8 +16,12 @@ import com.crappycomic.solarquest.model.ModelMessage.Type;
 
 public class TradeDialog extends JDialog
 {
+   private static final long serialVersionUID = 0;
+   
    private static class NodeListCellRenderer extends DefaultListCellRenderer
    {
+      private static final long serialVersionUID = 0;
+      
       private GraphicView view;
       
       private NodeListCellRenderer(GraphicView view)

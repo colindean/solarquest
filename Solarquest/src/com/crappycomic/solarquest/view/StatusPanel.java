@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import java.awt.*;
@@ -6,6 +10,8 @@ import javax.swing.*;
 
 public class StatusPanel extends JPanel
 {
+   private static final long serialVersionUID = 0;
+   
    public static final int DEFAULT_WIDTH = BoardPanel.DEFAULT_WIDTH;
    public static final int DEFAULT_HEIGHT = 150;
    

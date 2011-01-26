@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import java.awt.*;
@@ -36,6 +40,7 @@ public class GraphicView extends View
    
    private NodePanel nodePanel;
    
+   @Override
    protected void initialize()
    {
       SwingUtilities.invokeLater(new Runnable()
@@ -65,6 +70,8 @@ public class GraphicView extends View
             
             menu.add(new JMenuItem(action = new AbstractAction("Save and Quit")
             {
+               private static final long serialVersionUID = 0;
+               
                @Override
                public void actionPerformed(ActionEvent evt)
                {
@@ -76,6 +83,8 @@ public class GraphicView extends View
             
             menu.add(new JMenuItem(action = new AbstractAction("Quit")
             {
+               private static final long serialVersionUID = 0;
+               
                @Override
                public void actionPerformed(ActionEvent evt)
                {
@@ -386,13 +395,13 @@ public class GraphicView extends View
    @Override
    protected void tradeAccepted(Trade trade)
    {
-      statusPanel.appendText(trade.getTo() + " accepted " + trade.getFrom() + "'s trade."); // TODO replace with names
+      statusPanel.appendText(trade.getTo() + " accepted " + trade.getFrom() + "'s trade.");
    }
 
    @Override
    protected void tradeRejected(Trade trade)
    {
-      statusPanel.appendText(trade.getTo() + " rejected " + trade.getFrom() + "'s trade."); // TODO replace with names
+      statusPanel.appendText(trade.getTo() + " rejected " + trade.getFrom() + "'s trade.");
    }
    
    @Override

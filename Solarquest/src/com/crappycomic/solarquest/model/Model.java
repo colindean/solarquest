@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
@@ -5,6 +9,8 @@ import java.util.*;
 
 public abstract class Model implements Serializable
 {
+   private static final long serialVersionUID = 0;
+   
    protected Board board;
    
    protected String defaultView;

@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import java.io.Serializable;
@@ -82,6 +86,7 @@ public class ViewMessage implements Serializable
       return value;
    }
    
+   @Override
    public String toString()
    {
       return type + " " + player + " " + value;

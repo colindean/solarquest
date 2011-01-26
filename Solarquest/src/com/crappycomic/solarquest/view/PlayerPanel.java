@@ -1,3 +1,7 @@
+// Solarquest
+// Copyright (C) 2011 Colin Bartolome
+// Licensed under the GPL. See LICENSE.txt for details.
+
 package com.crappycomic.solarquest.view;
 
 import javax.swing.*;
@@ -7,6 +11,8 @@ import com.crappycomic.solarquest.model.*;
 // TODO: gray out on game over, improve layout
 public class PlayerPanel extends JPanel
 {
+   private static final long serialVersionUID = 0;
+   
    private GraphicView view;
    
    private JLabel locationLabel;
