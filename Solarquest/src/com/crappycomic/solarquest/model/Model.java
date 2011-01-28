@@ -148,12 +148,31 @@ public abstract class Model implements Serializable
       return node.getFuelPrice(ruleSet, player);
    }
 
-   public boolean isFuelStationSalable()
+   public boolean isFuelStationSalableNormally()
    {
-      return isFuelStationSalable(getCurrentPlayer());
+      Player player = getCurrentPlayer();
+      Node node = player.getCurrentNode();
+      
+      return isFuelStationSalableNormally(player, node);
    }
    
-   private boolean isFuelStationSalable(Player player)
+   protected boolean isFuelStationSalableNormally(Player player, Node node)
+   {
+      return isFuelStationSalableAtAll(player)
+         && RuleSet.isFuelStationAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_BUYBACK_AVAILABILITY), node);
+   }
+   
+   public boolean isFuelStationSalableForDebtSettlement()
+   {
+      return isFuelStationSalableForDebtSettlement(getCurrentPlayer());
+   }
+   
+   protected boolean isFuelStationSalableForDebtSettlement(Player player)
+   {
+      return isFuelStationSalableAtAll(player);
+   }
+   
+   private boolean isFuelStationSalableAtAll(Player player)
    {
       return player.getFuelStations() > 0;
    }
@@ -234,7 +253,7 @@ public abstract class Model implements Serializable
    
    protected boolean isFuelStationPurchaseable(Player player, Node node)
    {
-      return (ruleSet.getValue(RuleSet.FUEL_STATIONS_AVAILABLE_EVERYWHERE) || node.getType() == Node.Type.STATION)
+      return RuleSet.isFuelStationAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_PURCHASE_AVAILABILITY), node)
          && hasUnpurchasedFuelStation() && player.getCash() >= getFuelStationPrice();
    }
 

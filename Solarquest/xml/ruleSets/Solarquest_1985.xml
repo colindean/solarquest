@@ -26,8 +26,12 @@
     <ruleValue>1000</ruleValue>
   </rule>
   <rule>
-    <ruleName>fuel_stations_available_everywhere</ruleName>
-    <ruleValue>false</ruleValue>
+    <ruleName>fuel_station_purchase_availability</ruleName>
+    <ruleValue>stations</ruleValue>
+  </rule>
+  <rule>
+    <ruleName>fuel_station_buyback_availability</ruleName>
+    <ruleValue>stations</ruleValue>
   </rule>
   <rule>
     <ruleName>fuel_station_price</ruleName>

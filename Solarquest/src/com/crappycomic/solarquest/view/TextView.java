@@ -219,6 +219,7 @@ public class TextView extends View implements Runnable
       boolean fuelIsPurchaseable = model.isFuelPurchaseable();
       boolean fuelStationIsPlaceable = model.isFuelStationPlaceable();
       boolean fuelStationIsPurchaseable = model.isFuelStationPurchaseable();
+      boolean fuelStationIsSalable = model.isFuelStationSalableNormally();
 
       if (fuelIsCritical)
       {
@@ -238,6 +239,8 @@ public class TextView extends View implements Runnable
          System.out.println("P) Place fuel station");
       if (fuelStationIsPurchaseable)
          System.out.println("F) Buy fuel station");
+      if (fuelStationIsSalable)
+         System.out.println("S) Sell fuel station");
       System.out.println("Enter) End turn");
 
       String command = prompt();
@@ -261,6 +264,10 @@ public class TextView extends View implements Runnable
       else if (fuelStationIsPurchaseable && command.equalsIgnoreCase("F"))
       {
          sendMessage(Type.PURCHASE_FUEL_STATION);
+      }
+      else if (fuelStationIsSalable && command.equalsIgnoreCase("S"))
+      {
+         sendMessage(Type.SELL_FUEL_STATION_NORMALLY);
       }
       else
       {
@@ -371,7 +378,7 @@ public class TextView extends View implements Runnable
    protected void promptForDebtSettlement(Pair<Player, Integer> debt)
    {
       Player player = model.getCurrentPlayer();
-      boolean fuelStationIsSalable = model.isFuelStationSalable();
+      boolean fuelStationIsSalable = model.isFuelStationSalableForDebtSettlement();
       boolean nodeIsSalable = model.isNodeSalable();
       boolean tradeIsAllowed = model.isTradeAllowed();
       
@@ -390,7 +397,7 @@ public class TextView extends View implements Runnable
       
       if (fuelStationIsSalable && command.equalsIgnoreCase("F"))
       {
-         sendMessage(Type.SELL_FUEL_STATION);
+         sendMessage(Type.SELL_FUEL_STATION_FOR_DEBT_SETTLEMENT);
       }
       else if (nodeIsSalable && command.equalsIgnoreCase("P"))
       {

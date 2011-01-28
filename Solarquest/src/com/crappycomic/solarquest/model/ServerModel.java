@@ -240,8 +240,19 @@ public class ServerModel extends Model implements Runnable
                }
                break;
             }
-            case SELL_FUEL_STATION:
-               if (state == State.SETTLING_DEBT && isFuelStationSalable())
+            case SELL_FUEL_STATION_NORMALLY:
+               if ((state == State.PRE_ROLL || state == State.POST_ROLL) && isFuelStationSalableNormally(player, node))
+               {
+                  sellFuelStation(player);
+                  setState(state);
+               }
+               else
+               {
+                  sendInvalidModelState(connection);
+               }
+               break;
+            case SELL_FUEL_STATION_FOR_DEBT_SETTLEMENT:
+               if (state == State.SETTLING_DEBT && isFuelStationSalableForDebtSettlement(player))
                {
                   sellFuelStation(player);
                   attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
