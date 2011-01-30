@@ -1,0 +1,189 @@
+<html>
+<head>
+<title>Solarquest</title>
+<style type="text/css">
+
+body
+{
+   margin: 5px;
+}
+
+h2
+{
+   margin-top: 15px;
+   margin-bottom: 0;
+}
+
+dt
+{
+   font-weight: bold;
+}
+
+</style>
+</head>
+<body>
+
+<h1>Solarquest</h1>
+
+<p>Solarquest is a game of real estate market domination set in our Solar
+  System. Players compete with each other to travel between the various planets
+  and their moons, buying and consolidating properties along the way.</p>
+
+<h2>Setup</h2>
+
+<p>Each player starts on {start_node} with:</p>
+
+<ul>
+  <li>{initial_cash} Federons</li>
+  <li>{initial_fuel} hydrons of fuel</li>
+  <li>{initial_fuel_stations} fuel stations</li>
+</ul>
+
+<p>The order in with the players play is randomized when the game starts.</p>
+
+<h2>The Board</h2>
+
+<dl>
+  <dt>{start_node}</dt>
+  <dd>Home of the Federation League headquarters. Players that pass
+    {start_node} receive {pass_start_cash} Federons from the Federation League.
+    Players that land on {start_node} receive {land_on_start_cash} Federons.
+    Fuel is available on {start_node} for {fuel_price_on_start} Federons per
+    hydron.</dd>
+  
+  <dt>Planets and Moons</dt>
+  <dd>Rocky objects in the Solar System can be landed upon. Since they have
+    gravity, players must expend fuel in order to blast off of their surfaces.
+    Most planets and moons can be bought, sold, and exploited for profit.
+    Players charge each other fees for landing on planets and moons that they
+    own. Players may also place fuel stations in order to provide fuel to weary
+    travelers.</dd>
+  
+  <dt>Blue Dots</dt>
+  <dd>Interplanetary and orbital space is shown as blue dots on the board.
+    These spaces have no effect on players' spaceships.</dd>
+  
+  <dt>Black dots</dt>
+  <dd>Most planets are massive enough to generate a gravity well. These show up
+    as black dots on the board. Players may never land on these spaces. If a
+    player is in orbit and has not rolled a number high enough to pass the last
+    black dot when leaving orbit, the player must continue to orbit. If a
+    player is not in orbit and makes a roll that would land him or her on a
+    black dot, he or she is pulled backward until he or she can land.</dd>
+  
+  <dt>Federation Stations</dt>
+  <dd>The Federation League operates several outposts throughout the Solar
+    System. Players that land receive a bonus from the Federation League.</dd>
+  
+  <dt>Space Docks</dt>
+  <dd>Fuel is such a vital resource that entrepreneurs have built space docks
+    at strategic points in the Solar System. Players docking at space docks may
+    be required to pay a docking fee, but may purchase fuel after doing so.</dd>
+  
+  <dt>Research Labs</dt>
+  <dd>There's always science to be had somewhere in the Solar System. Players
+    can purchase controlling shares in research labs and then charge other
+    players laboratory fees when they visit. No fuel is available on research
+    labs, though.</dd>
+</dl>
+
+<h2>Property</h2>
+
+<p>Players may purchase planets, moons, space docks, and research labs that
+  they land on ({start_node} may never be purchased). Players that land on an
+  owned property must pay the owner for the privilege. The amount of money
+  increases if the owner owns more properties in the same color group. It never
+  costs anything for a player to land on a property he or she owns or on a
+  property that belongs to the Federation League.</p>
+
+<p>Players may sell unwanted properties back to the Federation League
+  {node_buyback_availability}. Players may sell properties to settle a debt
+  owed to another player. The player receives the full price on the deed, plus
+  {fuel_station_cost}, if a fuel station is present.</p>
+
+<h2>Fuel and Fuel Stations</h2>
+
+<p>Players expend fuel every time they blast off from a planet or moon. If a
+  player is on a planet or moon and rolls a number higher than the number of
+  hydrons of fuel in his or her tank, the player does not move. If the player
+  is on a property owned by another player, he or she must again pay the owner
+  rent for remaining on the property for an extra turn.</p>
+
+<p>Players may refuel at planets or moons on which a fuel station has been
+  placed or at any space dock. If the property is owned, the player pays the
+  owner the fuel price indicated on the deed. If the player owns multiple
+  properties of the same color, the fuel price goes up. Refueling at a property
+  that is owned by the Federation League is {fuel_available_on_unowned_node}.
+  When allowed, the fuel price on an unowned property is the lowest price
+  listed on the deed. Players can refuel to a maximum of {maximum_fuel}
+  hydrons.</p>
+
+<p>To avoid becoming stuck on a planet or moon, players may want to refuel only
+  to {low_fuel} hydrons, that being the greatest number that can be rolled that
+  does not result in drawing a Red Shift card. If a player with {low_fuel} or
+  fewer hydrons of fuel lands on an owned planet or moon that lacks a fuel
+  station, the player may declare the owner negligent and purchase the property
+  for the full price indicated on the deed.</p>
+
+<p>Certain Red Shift cards also cause the player to expend fuel. If a Red Shift
+  card requires more fuel than is in a player's tank, that player immediately
+  loses the game.</p>
+
+<p>Players that start a turn on a planet or moon with fewer than {minimum_fuel}
+  hydrons of fuel may not roll the dice without first refueling to at least
+  {minimum_hydrons} hydrons. If the player cannot refuel, he or she has become
+  stranded and immediately loses the game.</p>
+
+<p>When on {start_node}, fuel is available for {fuel_price_on_start} Federons
+  per hydron.</p>
+
+<p>Players may place a fuel station on a planet or moon immediately upon
+  purchasing it or when landing on it on a subsequent turn. Once placed, fuel
+  stations never move, even when the property later changes hands. Fuel
+  stations are worth {fuel_station_price} Federons at all times. They raise the
+  deed price of properties, when present. They can be purchased from the
+  Federation League {fuel_station_purchase_availability}. They can be sold to
+  the Federation League {fuel_station_buyback_availability}. They can be sold
+  to the Federation League to settle a debt owned to another player. They may
+  never be traded between players.</p>
+
+<p>The Federation League has a supply of {total_fuel_stations} fuel stations.
+  Players can buy up all remaining fuel stations in order to withhold them from
+  other players. This makes it more likely that other players will run low on
+  fuel and possibly become stranded.</p>
+
+<h2>Red Shift Cards</h2>
+
+<p>When a player rolls {red_shift_roll}, he or she does not move, but instead
+  draws a Red Shift card and follows the directions shown.</p>
+
+<h2>Winning the Game</h2>
+
+<p>The last player standing is the winner. Alternately, players can agree on a
+  time limit. In time limit games, the player with the greatest net worth is
+  the winner.</p>
+
+<h2>Losing the Game</h2>
+
+<p>Players can be eliminated from the game in the following ways:</p>
+
+<ul>
+  <li>Declaring bankruptcy when faced with an insurmountable debt.</li>
+  <li>Becoming stranded by attempting to roll the dice while on a planet or
+    moon with fewer than {minimum_fuel} hydrons of fuel.</li>
+  <li>Drawing a Red Shift card that requires the use of more fuel than the
+    player has available.</li>
+</ul>
+
+<p>When declaring bankruptcy, everything the player owned becomes the property
+  of the creditor. In the other two cases, everything the player owned becomes
+  the property of the Federation League. All fuel stations that were placed on
+  properties remain where they are.</p>
+
+<h2>License</h2>
+
+<p>This software is licensed under the GPL. Please see LICENSE.txt for more
+  details.</p>
+
+</body>
+</html>

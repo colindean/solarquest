@@ -459,11 +459,6 @@ public class ServerModel extends Model implements Runnable
       return id;
    }
    
-   public RuleSet getRuleSet()
-   {
-      return ruleSet;
-   }
-
    void setDefaultRuleSet(String defaultRuleSet)
    {
       this.defaultRuleSet = defaultRuleSet;
@@ -554,6 +549,7 @@ public class ServerModel extends Model implements Runnable
          for (Node node : nodes)
          {
             relinquishNode(player, node);
+            Thread.yield();
          }
          
          changePlayerCash(player, -player.getCash());
@@ -570,6 +566,7 @@ public class ServerModel extends Model implements Runnable
          {
             relinquishNode(player, node);
             obtainNode(beneficiary, node);
+            Thread.yield();
          }
          
          changePlayerCash(player, -cash);

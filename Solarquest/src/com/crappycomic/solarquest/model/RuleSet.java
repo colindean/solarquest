@@ -37,6 +37,11 @@ public class RuleSet implements Serializable
       {
          return (other instanceof Rule<?>) && name.equals(((Rule<?>)other).name);
       }
+      
+      public String getName()
+      {
+         return name;
+      }
    }
    
    public static enum RedShiftRoll
@@ -142,6 +147,50 @@ public class RuleSet implements Serializable
    public <T> T getValue(Rule<T> rule)
    {
       return (T)ruleValueMap.get(rule);
+   }
+   
+   public Set<Rule<?>> getRules()
+   {
+      return Collections.unmodifiableSet(ruleValueMap.keySet());
+   }
+   
+   public String getValueForManual(Rule<?> rule)
+   {
+      if (rule.type.equals(Integer.class))
+      {
+         return getValue(rule).toString();
+      }
+      else if (rule.type.equals(Boolean.class))
+      {
+         return getValue(rule).equals(Boolean.TRUE)
+            ? "allowed" : "not allowed";
+      }
+      else if (rule.type.equals(RedShiftRoll.class))
+      {
+         switch ((RedShiftRoll)getValue(rule))
+         {
+            case DOUBLES:
+               return "doubles";
+            case MAX_ROLL:
+               return "double " + getValue(DIE_PIPS);
+            case THIRTEEN:
+               return "a 1 and a 3";
+         }
+      }
+      else if (rule.type.equals(TransactionAvailability.class))
+      {
+         switch ((TransactionAvailability)getValue(rule))
+         {
+            case NOWHERE:
+               return "at no time";
+            case STATIONS:
+               return "at Federation Stations";
+            case EVERYWHERE:
+               return "at any time";
+         }
+      }
+      
+      return "RuleSet.getValueForManual() needs an update!";
    }
 
    public static boolean isRedShift(RedShiftRoll redShiftRoll, int diePips, int die1, int die2)

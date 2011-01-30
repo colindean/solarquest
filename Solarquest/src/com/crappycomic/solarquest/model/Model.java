@@ -326,6 +326,11 @@ public abstract class Model implements Serializable
       this.ruleSet = ruleSet;
    }
 
+   public RuleSet getRuleSet()
+   {
+      return ruleSet;
+   }
+
    public void setBoard(Board board)
    {
       this.board = board;

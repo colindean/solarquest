@@ -30,6 +30,8 @@ public class GraphicView extends View
    
    private JFrame frame;
    
+   private JFrame manualFrame;
+   
    private BoardPanel boardPanel;
    
    private PlayersPanel playersPanel;
@@ -92,6 +94,27 @@ public class GraphicView extends View
                }
             }));
             action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Q);
+            
+            menuBar.add(Box.createHorizontalGlue());
+            
+            menuBar.add(menu = new JMenu("Help"));
+            menu.setMnemonic('H');
+            
+            menu.add(new JMenuItem(action = new AbstractAction("Instruction Manual")
+            {
+               private static final long serialVersionUID = 0;
+               
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  if (manualFrame == null)
+                     manualFrame = new ManualFrame(getNodeDisplayName(model.getStartNode().getID()), model.getRuleSet());
+                  
+                  manualFrame.setVisible(true);
+               }
+            }
+            ));
+            action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_M);
             
             BorderLayout layout = new BorderLayout();
             

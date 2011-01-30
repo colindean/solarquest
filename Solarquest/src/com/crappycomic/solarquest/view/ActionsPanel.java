@@ -419,6 +419,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
+            view.highlightNodes(null);
             switchPanel(previousPanel);
          }
       };
