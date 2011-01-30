@@ -93,16 +93,16 @@ public class ClientModel extends Model implements Serializable
          case PLAYER_SOLD_FUEL_STATION:
             fuelStationsRemaining++;
             break;
-         case MODEL_CHOOSING_PROPERTY_LOST_TO_LEAGUE:
-         case MODEL_CHOOSING_PROPERTY_WON_FROM_LEAGUE:
-         case MODEL_CHOOSING_PROPERTY_WON_FROM_PLAYER:
+         case MODEL_CHOOSING_NODE_LOST_TO_LEAGUE:
+         case MODEL_CHOOSING_NODE_WON_FROM_LEAGUE:
+         case MODEL_CHOOSING_NODE_WON_FROM_PLAYER:
          case MODEL_GAME_OVER:
          case MODEL_INVALID_STATE:
          case MODEL_POST_ROLL:
          case MODEL_PRE_LAND:
          case PLAYER_DREW_CARD:
-         case PLAYER_HAD_NO_PROPERTY_TO_LOSE:
-         case PLAYER_HAD_NO_PROPERTY_TO_WIN:
+         case PLAYER_HAD_NO_NODE_TO_LOSE:
+         case PLAYER_HAD_NO_NODE_TO_WIN:
          case PLAYER_HAS_INSUFFICIENT_CASH:
          case PLAYER_HAS_MULTIPLE_ALLOWED_MOVES:
          case PLAYER_LANDED_ON_START_NODE:

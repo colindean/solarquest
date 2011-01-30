@@ -25,9 +25,9 @@ public class ServerModel extends Model implements Runnable
       SETTLING_DEBT,
       GAME_OVER,
       TRADING,
-      CHOOSING_PROPERTY_LOST_TO_LEAGUE,
-      CHOOSING_PROPERTY_WON_FROM_LEAGUE,
-      CHOOSING_PROPERTY_WON_FROM_PLAYER
+      CHOOSING_NODE_LOST_TO_LEAGUE,
+      CHOOSING_NODE_WON_FROM_LEAGUE,
+      CHOOSING_NODE_WON_FROM_PLAYER
    }
    
    private String id;
@@ -262,6 +262,40 @@ public class ServerModel extends Model implements Runnable
                   sendInvalidModelState(connection);
                }
                break;
+            case SELL_NODE_NORMALLY:
+            {
+               Node chosenNode = board.getNode((String)message.getValue());
+               
+               if ((state == State.PRE_ROLL || state == State.POST_ROLL)
+                  && isNodeSalableNormally(player, node)
+                  && chosenNode != null && player.equals(chosenNode.getOwner()))
+               {
+                  sellNode(player, chosenNode);
+                  setState(state);
+               }
+               else
+               {
+                  sendInvalidModelState(connection);
+               }
+               break;
+            }
+            case SELL_NODE_FOR_DEBT_SETTLEMENT:
+            {
+               Node chosenNode = board.getNode((String)message.getValue());
+               
+               if (state == State.SETTLING_DEBT
+                  && isNodeSalableForDebtSettlement(player)
+                  && chosenNode != null && player.equals(chosenNode.getOwner()))
+               {
+                  sellNode(player, chosenNode);
+                  attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
+               }
+               else
+               {
+                  sendInvalidModelState(connection);
+               }
+               break;
+            }
             case DECLARE_BANKRUPTCY:
                if (state == State.SETTLING_DEBT)
                {
@@ -274,21 +308,6 @@ public class ServerModel extends Model implements Runnable
                   sendInvalidModelState(connection);
                }
                break;
-            case SELL_NODE:
-            {
-               Node chosenNode = board.getNode((String)message.getValue());
-               
-               if (state == State.SETTLING_DEBT && isNodeSalable(player) && chosenNode != null && player.equals(chosenNode.getOwner()))
-               {
-                  sellNode(player, chosenNode);
-                  attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
-               }
-               else
-               {
-                  sendInvalidModelState(connection);
-               }
-               break;
-            }
             case TRADE:
                currentTrade = (Trade)message.getValue();
                postTradeState = state;
@@ -332,11 +351,11 @@ public class ServerModel extends Model implements Runnable
                   sendInvalidModelState(connection);
                }
                break;
-            case CHOOSE_PROPERTY_LOST_TO_LEAGUE:
+            case CHOOSE_NODE_LOST_TO_LEAGUE:
             {
                Node chosenNode = board.getNode((String)message.getValue());
                
-               if (state == State.CHOOSING_PROPERTY_LOST_TO_LEAGUE && chosenNode != null && player.equals(chosenNode.getOwner()))
+               if (state == State.CHOOSING_NODE_LOST_TO_LEAGUE && chosenNode != null && player.equals(chosenNode.getOwner()))
                {
                   relinquishNode(player, chosenNode);
                   setState(State.POST_ROLL);
@@ -347,11 +366,11 @@ public class ServerModel extends Model implements Runnable
                }
                break;
             }
-            case CHOOSE_PROPERTY_WON_FROM_LEAGUE:
+            case CHOOSE_NODE_WON_FROM_LEAGUE:
             {
                Node chosenNode = board.getNode((String)message.getValue());
                
-               if (state == State.CHOOSING_PROPERTY_WON_FROM_LEAGUE && chosenNode != null && chosenNode.getOwner() == null)
+               if (state == State.CHOOSING_NODE_WON_FROM_LEAGUE && chosenNode != null && chosenNode.getOwner() == null)
                {
                   obtainNode(player, chosenNode);
                   setState(State.POST_ROLL);
@@ -362,11 +381,11 @@ public class ServerModel extends Model implements Runnable
                }
                break;
             }
-            case CHOOSE_PROPERTY_WON_FROM_PLAYER:
+            case CHOOSE_NODE_WON_FROM_PLAYER:
             {
                Node chosenNode = board.getNode((String)message.getValue());
                
-               if (state == State.CHOOSING_PROPERTY_WON_FROM_PLAYER && chosenNode != null && chosenNode.getOwner() != null
+               if (state == State.CHOOSING_NODE_WON_FROM_PLAYER && chosenNode != null && chosenNode.getOwner() != null
                   && !player.equals(chosenNode.getOwner()))
                {
                   relinquishNode(chosenNode.getOwner(), chosenNode);
@@ -403,14 +422,14 @@ public class ServerModel extends Model implements Runnable
          case PRE_ROLL:
             type = Type.MODEL_PRE_ROLL;
             break;
-         case CHOOSING_PROPERTY_LOST_TO_LEAGUE:
-            type = Type.MODEL_CHOOSING_PROPERTY_LOST_TO_LEAGUE;
+         case CHOOSING_NODE_LOST_TO_LEAGUE:
+            type = Type.MODEL_CHOOSING_NODE_LOST_TO_LEAGUE;
             break;
-         case CHOOSING_PROPERTY_WON_FROM_PLAYER:
-            type = Type.MODEL_CHOOSING_PROPERTY_WON_FROM_PLAYER;
+         case CHOOSING_NODE_WON_FROM_PLAYER:
+            type = Type.MODEL_CHOOSING_NODE_WON_FROM_PLAYER;
             break;
-         case CHOOSING_PROPERTY_WON_FROM_LEAGUE:
-            type = Type.MODEL_CHOOSING_PROPERTY_WON_FROM_LEAGUE;
+         case CHOOSING_NODE_WON_FROM_LEAGUE:
+            type = Type.MODEL_CHOOSING_NODE_WON_FROM_LEAGUE;
             break;
          // Have already sent vital paramaters, so don't confuse things by sending a MODEL message.
          case CHOOSING_ALLOWED_MOVE:
@@ -734,11 +753,11 @@ public class ServerModel extends Model implements Runnable
 
       if (nodeIsAvailable)
       {
-         setState(State.CHOOSING_PROPERTY_LOST_TO_LEAGUE);
+         setState(State.CHOOSING_NODE_LOST_TO_LEAGUE);
       }
       else
       {
-         sendMessage(Type.PLAYER_HAD_NO_PROPERTY_TO_LOSE, player);
+         sendMessage(Type.PLAYER_HAD_NO_NODE_TO_LOSE, player);
       }
    }
    
@@ -759,11 +778,11 @@ public class ServerModel extends Model implements Runnable
 
       if (nodeIsAvailable)
       {
-         setState(State.CHOOSING_PROPERTY_WON_FROM_LEAGUE);
+         setState(State.CHOOSING_NODE_WON_FROM_LEAGUE);
       }
       else
       {
-         sendMessage(Type.PLAYER_HAD_NO_PROPERTY_TO_WIN, player);
+         sendMessage(Type.PLAYER_HAD_NO_NODE_TO_WIN, player);
       }
    }
    
@@ -786,11 +805,11 @@ public class ServerModel extends Model implements Runnable
       
       if (nodeIsAvailable)
       {
-         setState(State.CHOOSING_PROPERTY_WON_FROM_PLAYER);
+         setState(State.CHOOSING_NODE_WON_FROM_PLAYER);
       }
       else
       {
-         sendMessage(Type.PLAYER_HAD_NO_PROPERTY_TO_WIN, player);
+         sendMessage(Type.PLAYER_HAD_NO_NODE_TO_WIN, player);
       }
    }
    

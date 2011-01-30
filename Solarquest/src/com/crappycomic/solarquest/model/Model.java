@@ -159,7 +159,7 @@ public abstract class Model implements Serializable
    protected boolean isFuelStationSalableNormally(Player player, Node node)
    {
       return isFuelStationSalableAtAll(player)
-         && RuleSet.isFuelStationAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_BUYBACK_AVAILABILITY), node);
+         && RuleSet.isTransactionAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_BUYBACK_AVAILABILITY), node);
    }
    
    public boolean isFuelStationSalableForDebtSettlement()
@@ -177,12 +177,32 @@ public abstract class Model implements Serializable
       return player.getFuelStations() > 0;
    }
 
-   public boolean isNodeSalable()
+   public boolean isNodeSalableNormally()
    {
-      return isNodeSalable(getCurrentPlayer());
+      Player player = getCurrentPlayer();
+      Node node = player.getCurrentNode();
+      
+      return isNodeSalableAtAll(player)
+         && isNodeSalableNormally(player, node);
    }
    
-   protected boolean isNodeSalable(Player player)
+   protected boolean isNodeSalableNormally(Player player, Node node)
+   {
+      return isNodeSalableAtAll(player)
+         && RuleSet.isTransactionAvailable(ruleSet.getValue(RuleSet.NODE_BUYBACK_AVAILABILITY), node);
+   }
+
+   public boolean isNodeSalableForDebtSettlement()
+   {
+      return isNodeSalableForDebtSettlement(getCurrentPlayer());
+   }
+   
+   protected boolean isNodeSalableForDebtSettlement(Player player)
+   {
+      return isNodeSalableAtAll(player);
+   }
+   
+   private boolean isNodeSalableAtAll(Player player)
    {
       return !player.getOwnedNodes().isEmpty();
    }
@@ -253,7 +273,7 @@ public abstract class Model implements Serializable
    
    protected boolean isFuelStationPurchaseable(Player player, Node node)
    {
-      return RuleSet.isFuelStationAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_PURCHASE_AVAILABILITY), node)
+      return RuleSet.isTransactionAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_PURCHASE_AVAILABILITY), node)
          && hasUnpurchasedFuelStation() && player.getCash() >= getFuelStationPrice();
    }
 

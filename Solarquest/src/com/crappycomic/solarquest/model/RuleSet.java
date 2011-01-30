@@ -46,7 +46,7 @@ public class RuleSet implements Serializable
       THIRTEEN
    }
    
-   public static enum FuelStationAvailability
+   public static enum TransactionAvailability
    {
       NOWHERE,
       STATIONS,
@@ -59,8 +59,9 @@ public class RuleSet implements Serializable
    public static final Rule<Integer> TOTAL_FUEL_STATIONS = new Rule<Integer>("total_fuel_stations", Integer.class);
    public static final Rule<Integer> PASS_START_CASH = new Rule<Integer>("pass_start_cash", Integer.class);
    public static final Rule<Integer> LAND_ON_START_CASH = new Rule<Integer>("land_on_start_cash", Integer.class);
-   public static final Rule<FuelStationAvailability> FUEL_STATION_PURCHASE_AVAILABILITY = new Rule<FuelStationAvailability>("fuel_station_purchase_availability", FuelStationAvailability.class);
-   public static final Rule<FuelStationAvailability> FUEL_STATION_BUYBACK_AVAILABILITY = new Rule<FuelStationAvailability>("fuel_station_buyback_availability", FuelStationAvailability.class);
+   public static final Rule<TransactionAvailability> FUEL_STATION_PURCHASE_AVAILABILITY = new Rule<TransactionAvailability>("fuel_station_purchase_availability", TransactionAvailability.class);
+   public static final Rule<TransactionAvailability> FUEL_STATION_BUYBACK_AVAILABILITY = new Rule<TransactionAvailability>("fuel_station_buyback_availability", TransactionAvailability.class);
+   public static final Rule<TransactionAvailability> NODE_BUYBACK_AVAILABILITY = new Rule<TransactionAvailability>("node_buyback_availability", TransactionAvailability.class);
    public static final Rule<Integer> FUEL_STATION_PRICE = new Rule<Integer>("fuel_station_price", Integer.class);
    public static final Rule<Integer> FUEL_PRICE_ON_START = new Rule<Integer>("fuel_price_on_start", Integer.class);
    public static final Rule<Integer> MAXIMUM_FUEL = new Rule<Integer>("maximum_fuel", Integer.class);
@@ -74,7 +75,6 @@ public class RuleSet implements Serializable
    public static final Rule<Boolean> BYPASS_ALLOWED = new Rule<Boolean>("bypass_allowed", Boolean.class);
    public static final Rule<Boolean> FUEL_AVAILABLE_ON_UNOWNED_NODE = new Rule<Boolean>("fuel_available_on_unowned_node", Boolean.class); // false for Apollo 13
    public static final Rule<Boolean> MUST_REFUEL_AT_DEAD_END = new Rule<Boolean>("must_refuel_at_dead_end", Boolean.class); // maybe true for 1985 but not 1988? (Sinope Rule)
-   public static final Rule<Boolean> BUYBACK_ALWAYS_ALLOWED = new Rule<Boolean>("buyback_always_allowed", Boolean.class); // maybe false for 1986 but definitely true for 1988
 
    private static final Map<String, Rule<?>> RULE_NAME_MAP;
    static
@@ -89,6 +89,7 @@ public class RuleSet implements Serializable
       ruleNameMap.put(LAND_ON_START_CASH.name, LAND_ON_START_CASH);
       ruleNameMap.put(FUEL_STATION_PURCHASE_AVAILABILITY.name, FUEL_STATION_PURCHASE_AVAILABILITY);
       ruleNameMap.put(FUEL_STATION_BUYBACK_AVAILABILITY.name, FUEL_STATION_BUYBACK_AVAILABILITY);
+      ruleNameMap.put(NODE_BUYBACK_AVAILABILITY.name, NODE_BUYBACK_AVAILABILITY);
       ruleNameMap.put(FUEL_STATION_PRICE.name, FUEL_STATION_PRICE);
       ruleNameMap.put(FUEL_PRICE_ON_START.name, FUEL_PRICE_ON_START);
       ruleNameMap.put(MAXIMUM_FUEL.name, MAXIMUM_FUEL);
@@ -102,7 +103,6 @@ public class RuleSet implements Serializable
       ruleNameMap.put(BYPASS_ALLOWED.name, BYPASS_ALLOWED);
       ruleNameMap.put(FUEL_AVAILABLE_ON_UNOWNED_NODE.name, FUEL_AVAILABLE_ON_UNOWNED_NODE);
       ruleNameMap.put(MUST_REFUEL_AT_DEAD_END.name, MUST_REFUEL_AT_DEAD_END);
-      ruleNameMap.put(BUYBACK_ALWAYS_ALLOWED.name, BUYBACK_ALWAYS_ALLOWED);
       
       RULE_NAME_MAP = Collections.unmodifiableMap(ruleNameMap);
    }
@@ -134,8 +134,8 @@ public class RuleSet implements Serializable
          ruleValueMap.put(rule, Boolean.parseBoolean(value));
       else if (rule.type == RedShiftRoll.class)
          ruleValueMap.put(rule, RedShiftRoll.valueOf(value.toUpperCase()));
-      else if (rule.type == FuelStationAvailability.class)
-         ruleValueMap.put(rule, FuelStationAvailability.valueOf(value.toUpperCase()));
+      else if (rule.type == TransactionAvailability.class)
+         ruleValueMap.put(rule, TransactionAvailability.valueOf(value.toUpperCase()));
    }
    
    @SuppressWarnings("unchecked")
@@ -159,7 +159,7 @@ public class RuleSet implements Serializable
       return false;
    }
    
-   public static boolean isFuelStationAvailable(FuelStationAvailability availability, Node node)
+   public static boolean isTransactionAvailable(TransactionAvailability availability, Node node)
    {
       switch (availability)
       {

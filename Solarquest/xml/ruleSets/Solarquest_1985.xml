@@ -34,6 +34,10 @@
     <ruleValue>stations</ruleValue>
   </rule>
   <rule>
+    <ruleName>node_buyback_availability</ruleName>
+    <ruleValue>stations</ruleValue>
+  </rule>
+  <rule>
     <ruleName>fuel_station_price</ruleName>
     <ruleValue>500</ruleValue>
   </rule>
@@ -75,10 +79,6 @@
   </rule>
   <rule>
     <ruleName>bypass_allowed</ruleName>
-    <ruleValue>false</ruleValue>
-  </rule>
-  <rule>
-    <ruleName>buyback_always_allowed</ruleName>
     <ruleValue>false</ruleValue>
   </rule>
   <rule>

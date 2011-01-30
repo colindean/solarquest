@@ -46,14 +46,14 @@ public abstract class View
          case MODEL_POST_ROLL:
             promptForPostRollActions();
             break;
-         case MODEL_CHOOSING_PROPERTY_LOST_TO_LEAGUE:
-            promptForPropertyLostToLeague();
+         case MODEL_CHOOSING_NODE_LOST_TO_LEAGUE:
+            promptForNodeLostToLeague();
             break;
-         case MODEL_CHOOSING_PROPERTY_WON_FROM_LEAGUE:
-            promptForPropertyWonFromLeague();
+         case MODEL_CHOOSING_NODE_WON_FROM_LEAGUE:
+            promptForNodeWonFromLeague();
             break;
-         case MODEL_CHOOSING_PROPERTY_WON_FROM_PLAYER:
-            promptForPropertyWonFromPlayer();
+         case MODEL_CHOOSING_NODE_WON_FROM_PLAYER:
+            promptForNodeWonFromPlayer();
             break;
          case TRADE_ACCEPTED:
             tradeAccepted((Trade)message.getValue());
@@ -151,11 +151,11 @@ public abstract class View
          case PLAYER_OBTAINED_NODE:
             playerObtainedNode(message.getPlayer(), (Node)message.getValue());
             break;
-         case PLAYER_HAD_NO_PROPERTY_TO_LOSE:
-            playerHadNoPropertyToLose(message.getPlayer());
+         case PLAYER_HAD_NO_NODE_TO_LOSE:
+            playerHadNoNodeToLose(message.getPlayer());
             break;
-         case PLAYER_HAD_NO_PROPERTY_TO_WIN:
-            playerHadNoPropertyToWin(message.getPlayer());
+         case PLAYER_HAD_NO_NODE_TO_WIN:
+            playerHadNoNodeToWin(message.getPlayer());
             break;
       }
       
@@ -221,9 +221,9 @@ public abstract class View
    
    protected abstract void playerSoldFuelStation(Player player);
    
-   protected abstract void playerHadNoPropertyToWin(Player player);
+   protected abstract void playerHadNoNodeToWin(Player player);
    
-   protected abstract void playerHadNoPropertyToLose(Player player);
+   protected abstract void playerHadNoNodeToLose(Player player);
 
    protected abstract void promptForPreRollActions();
    
@@ -235,11 +235,11 @@ public abstract class View
    
    protected abstract void promptForTradeDecision(Trade trade);
    
-   protected abstract void promptForPropertyLostToLeague();
+   protected abstract void promptForNodeLostToLeague();
    
-   protected abstract void promptForPropertyWonFromLeague();
+   protected abstract void promptForNodeWonFromLeague();
    
-   protected abstract void promptForPropertyWonFromPlayer();
+   protected abstract void promptForNodeWonFromPlayer();
    
    protected abstract void initialize();
    

@@ -181,13 +181,13 @@ public class GraphicView extends View
    }
 
    @Override
-   protected void playerHadNoPropertyToLose(Player player)
+   protected void playerHadNoNodeToLose(Player player)
    {
       statusPanel.appendText(player.getName() + " did not have to relinquish a property because none was owned.");      
    }
 
    @Override
-   protected void playerHadNoPropertyToWin(Player player)
+   protected void playerHadNoNodeToWin(Player player)
    {
       statusPanel.appendText(player.getName() + " was unable to obtain control of a property because none was available.");      
    }
@@ -361,24 +361,24 @@ public class GraphicView extends View
    }
 
    @Override
-   protected void promptForPropertyLostToLeague()
+   protected void promptForNodeLostToLeague()
    {
       actionsPanel.showChooseNodeActions("Choose a property to relinquish to the Federation League:",
-         model.getCurrentPlayer().getOwnedNodes(), Type.CHOOSE_PROPERTY_LOST_TO_LEAGUE, false);
+         model.getCurrentPlayer().getOwnedNodes(), Type.CHOOSE_NODE_LOST_TO_LEAGUE, false);
    }
 
    @Override
-   protected void promptForPropertyWonFromLeague()
+   protected void promptForNodeWonFromLeague()
    {
       actionsPanel.showChooseNodeActions("Choose a property to obtain from the Federation League:",
-         model.getUnownedNodes(), Type.CHOOSE_PROPERTY_WON_FROM_LEAGUE, false);
+         model.getUnownedNodes(), Type.CHOOSE_NODE_WON_FROM_LEAGUE, false);
    }
 
    @Override
-   protected void promptForPropertyWonFromPlayer()
+   protected void promptForNodeWonFromPlayer()
    {
       actionsPanel.showChooseNodeActions("Choose a property to obtain from another player:",
-         model.getOwnedNodes(model.getCurrentPlayer()), Type.CHOOSE_PROPERTY_WON_FROM_PLAYER, false);
+         model.getOwnedNodes(model.getCurrentPlayer()), Type.CHOOSE_NODE_WON_FROM_PLAYER, false);
    }
 
    @Override

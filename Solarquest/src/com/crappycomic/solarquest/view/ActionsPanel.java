@@ -105,7 +105,9 @@ public class ActionsPanel extends JPanel
    
    private Action sellFuelStationForDebtSettlementAction;
    
-   private Action sellNodeAction;
+   private Action sellNodeNormallyAction;
+   
+   private Action sellNodeForDebtSettlementAction;
    
    private JLabel chooseAllowedMoveLabel;
    
@@ -209,6 +211,18 @@ public class ActionsPanel extends JPanel
          }
       };
       
+      sellNodeNormallyAction = new AbstractAction("Sell Property")
+      {
+         private static final long serialVersionUID = 0;
+         
+         @Override
+         public void actionPerformed(ActionEvent evt)
+         {
+            showChooseNodeActions("Choose a property to sell to the Federation League:",
+               model.getCurrentPlayer().getOwnedNodes(), Type.SELL_NODE_NORMALLY, true);
+         }
+      };
+      
       Action rollDiceAction = new AbstractAction("Roll Dice")
       {
          private static final long serialVersionUID = 0;
@@ -239,6 +253,8 @@ public class ActionsPanel extends JPanel
       preRollPanel.add(createButton(purchaseFuelStationAction));
       preRollPanel.add(Box.createVerticalStrut(GAP));
       preRollPanel.add(createButton(sellFuelStationNormallyAction));
+      preRollPanel.add(Box.createVerticalStrut(GAP));
+      preRollPanel.add(createButton(sellNodeNormallyAction));
       preRollPanel.add(Box.createVerticalGlue());
       preRollPanel.add(rollDiceButton = createButton(rollDiceAction));
 
@@ -311,6 +327,8 @@ public class ActionsPanel extends JPanel
       postRollPanel.add(createButton(purchaseFuelStationAction));
       postRollPanel.add(Box.createVerticalStrut(GAP));
       postRollPanel.add(createButton(sellFuelStationNormallyAction));
+      postRollPanel.add(Box.createVerticalStrut(GAP));
+      postRollPanel.add(createButton(sellNodeNormallyAction));
       postRollPanel.add(Box.createVerticalGlue());
       postRollPanel.add(endTurnButton = createButton(endTurnAction));
       
@@ -337,7 +355,7 @@ public class ActionsPanel extends JPanel
          }
       };
       
-      sellNodeAction = new AbstractAction("Sell Property")
+      sellNodeForDebtSettlementAction = new AbstractAction("Sell Property")
       {
          private static final long serialVersionUID = 0;
          
@@ -345,7 +363,7 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             showChooseNodeActions("Choose a property to sell to the Federation League:",
-               model.getCurrentPlayer().getOwnedNodes(), Type.SELL_NODE, true);
+               model.getCurrentPlayer().getOwnedNodes(), Type.SELL_NODE_FOR_DEBT_SETTLEMENT, true);
          }
       };
       
@@ -358,7 +376,7 @@ public class ActionsPanel extends JPanel
       debtSettlementPanel.add(Box.createVerticalStrut(GAP));
       debtSettlementPanel.add(createButton(sellFuelStationForDebtSettlementAction));
       debtSettlementPanel.add(Box.createVerticalStrut(GAP));
-      debtSettlementPanel.add(createButton(sellNodeAction));
+      debtSettlementPanel.add(createButton(sellNodeForDebtSettlementAction));
       debtSettlementPanel.add(Box.createVerticalGlue());
       debtSettlementPanel.add(createButton(declareBankruptcyAction));
       
@@ -548,6 +566,7 @@ public class ActionsPanel extends JPanel
          boolean fuelStationIsPlaceable = model.isFuelStationPlaceable();
          boolean fuelStationIsPurchaseable = model.isFuelStationPurchaseable();
          boolean fuelStationIsSalable = model.isFuelStationSalableNormally();
+         boolean nodeIsSalable = model.isNodeSalableNormally();
          boolean fuelIsCritical = model.isFuelCritical();
          
          preRollLabel.setText(getPreRollLabelText(player));
@@ -560,6 +579,7 @@ public class ActionsPanel extends JPanel
          purchaseFuelStationAction.putValue(Action.SHORT_DESCRIPTION, getPurchaseFuelStationActionTooltip(fuelStationIsPurchaseable, model.getFuelStationPrice()));
          sellFuelStationNormallyAction.setEnabled(fuelStationIsSalable);
          sellFuelStationNormallyAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
+         sellNodeNormallyAction.setEnabled(nodeIsSalable);
          rollDiceButton.setBackground(fuelIsCritical ? CRITICAL_FUEL_EMERGENCY : null);
          
          switchPanel(preRollPanel);
@@ -608,6 +628,7 @@ public class ActionsPanel extends JPanel
          boolean fuelStationIsPlaceable = model.isFuelStationPlaceable();
          boolean fuelStationIsPurchaseable = model.isFuelStationPurchaseable();
          boolean fuelStationIsSalable = model.isFuelStationSalableNormally();
+         boolean nodeIsSalable = model.isNodeSalableNormally();
          boolean fuelIsCritical = model.isFuelCritical();
          int fuelPrice = model.getFuelPrice();
          
@@ -623,6 +644,7 @@ public class ActionsPanel extends JPanel
          purchaseFuelStationAction.putValue(Action.SHORT_DESCRIPTION, getPurchaseFuelStationActionTooltip(fuelStationIsPurchaseable, model.getFuelStationPrice()));
          sellFuelStationNormallyAction.setEnabled(fuelStationIsSalable);
          sellFuelStationNormallyAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
+         sellNodeNormallyAction.setEnabled(nodeIsSalable);
          endTurnButton.setBackground(fuelIsCritical ? CRITICAL_FUEL_WARNING : null);
          
          switchPanel(postRollPanel);
@@ -643,13 +665,13 @@ public class ActionsPanel extends JPanel
       if (view.isPlayerLocal(player))
       {
          boolean fuelStationIsSalable = model.isFuelStationSalableForDebtSettlement();
-         boolean nodeIsSalable = model.isNodeSalable();
+         boolean nodeIsSalable = model.isNodeSalableForDebtSettlement();
          
          debtSettlementPlayersLabel.setText(getDebtSettlementPlayersLabelText(player, debt.getFirst()));
          debtSettlementAmountLabel.setText(getDebtSettlementAmountLabelText(debt.getSecond()));
          sellFuelStationForDebtSettlementAction.setEnabled(fuelStationIsSalable);
          sellFuelStationForDebtSettlementAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
-         sellNodeAction.setEnabled(nodeIsSalable);
+         sellNodeForDebtSettlementAction.setEnabled(nodeIsSalable);
    
          switchPanel(debtSettlementPanel);
       }
