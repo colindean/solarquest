@@ -281,48 +281,66 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
    /** Informs all clients which players are local, sets up the {@link View}, and starts the game. */
    private boolean start(ServerModel serverModel) throws SAXException, IOException
    {
-      List<Player> players = serverModel == null ? new ArrayList<Player>() : serverModel.getPlayers();
-      Client client = new Client(null);
-      LocalConnection localConnection = new LocalConnection(server, client);
-
-      server.setLocalConnection(localConnection);
-
+      // Do all the error checking first, before setting up any other game objects.
+      int playerCount = 0;
+      
       for (int ndx = 0; ndx < playerStateBoxes.length; ndx++)
       {
-         if (playerStateBoxes[ndx] == null)
-            continue;
-         
          Object playerState = playerStateBoxes[ndx].getSelectedItem();
          
          if (playerState == PlayerState.LOCAL)
          {
             if (playerNames[ndx].getText().trim().isEmpty())
             {
-               JOptionPane.showMessageDialog(this, "Please enter a name for every local player.", "Error", JOptionPane.ERROR_MESSAGE);
+               JOptionPane.showMessageDialog(this,
+                  "Please enter a name for every local player.",
+                  "Error", JOptionPane.ERROR_MESSAGE);
                return false;
             }
             
-            addPlayer(serverModel, players, ndx, true);
+            playerCount++;
          }
          else if (playerState == PlayerState.REMOTE)
          {
             if (playerNames[ndx].getText().trim().isEmpty())
             {
                JOptionPane.showMessageDialog(this,
-                  "One or more Remote player slots are still open.\nPlease close before continuing.", "Error", JOptionPane.ERROR_MESSAGE);
+                  "One or more Remote player slots are still open.\nPlease close before continuing.",
+                  "Error", JOptionPane.ERROR_MESSAGE);
                return false;
             }
             
-            addPlayer(serverModel, players, ndx, false);
+            playerCount++;
          }
       }
       
-      if (players.size() < 2)
+      if (playerCount < 2)
       {
          JOptionPane.showMessageDialog(this, "You can't have a game with fewer than two players!", "Error", JOptionPane.ERROR_MESSAGE);
          return false;
       }
       
+      // Now set up the game objects for real.
+      List<Player> players = serverModel == null ? new ArrayList<Player>() : serverModel.getPlayers();
+      Client client = new Client(null);
+      LocalConnection localConnection = new LocalConnection(server, client);
+
+      server.setLocalConnection(localConnection);
+      
+      for (int ndx = 0; ndx < playerStateBoxes.length; ndx++)
+      {
+         Object playerState = playerStateBoxes[ndx].getSelectedItem();
+         
+         if (playerState == PlayerState.LOCAL)
+         {
+            addPlayer(serverModel, players, ndx, true);
+         }
+         else if (playerState == PlayerState.REMOTE)
+         {
+            addPlayer(serverModel, players, ndx, false);
+         }
+      }
+
       if (serverModel == null)
       {
          ModelXMLLoader xmlLoader = new ModelXMLLoader();
