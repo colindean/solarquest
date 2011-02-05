@@ -30,6 +30,31 @@ public class ServerModel extends Model implements Runnable
       CHOOSING_NODE_WON_FROM_PLAYER
    }
    
+   private static class Debt extends Pair<Integer, Integer>
+   {
+      private static final long serialVersionUID = 4944695423119724571L;
+
+      private Debt(Player debtor, int amount)
+      {
+         this(debtor.getNumber(), amount);
+      }
+      
+      private Debt(int debtor, int amount)
+      {
+         super(debtor, amount);
+      }
+      
+      private int getDebtor()
+      {
+         return getFirst();
+      }
+      
+      private int getAmount()
+      {
+         return getSecond();
+      }
+   }
+   
    private String id;
    
    private transient Server server;
@@ -59,9 +84,13 @@ public class ServerModel extends Model implements Runnable
    
    private ViewMessage postTradeMessage;
    
+   private State postDebtSettlementState;
+   
    private List<Node> allowedMovesList;
    
-   private Pair<Player, Integer> debt;
+   private List<Debt> debts = new ArrayList<Debt>();
+   
+   private int currentCreditor;
    
    private Trade currentTrade;
    
@@ -252,10 +281,12 @@ public class ServerModel extends Model implements Runnable
                }
                break;
             case SELL_FUEL_STATION_FOR_DEBT_SETTLEMENT:
-               if (state == State.SETTLING_DEBT && isFuelStationSalableForDebtSettlement(player))
+               if (state == State.SETTLING_DEBT
+                  && isPlayerSettlingDebt(player)
+                  && isFuelStationSalableForDebtSettlement(player))
                {
                   sellFuelStation(player);
-                  attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
+                  attemptToSettleDebt();
                }
                else
                {
@@ -284,11 +315,12 @@ public class ServerModel extends Model implements Runnable
                Node chosenNode = board.getNode((String)message.getValue());
                
                if (state == State.SETTLING_DEBT
+                  && isPlayerSettlingDebt(player)
                   && isNodeSalableForDebtSettlement(player)
                   && chosenNode != null && player.equals(chosenNode.getOwner()))
                {
                   sellNode(player, chosenNode);
-                  attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
+                  attemptToSettleDebt();
                }
                else
                {
@@ -299,8 +331,10 @@ public class ServerModel extends Model implements Runnable
             case DECLARE_BANKRUPTCY:
                if (state == State.SETTLING_DEBT)
                {
-                  sendMessage(Type.PLAYER_LOST_DUE_TO_BANKRUPTCY, player, debt.getFirst());
-                  removePlayer(player, debt.getFirst());
+                  Player creditor = playerMap.get(currentCreditor);
+                  
+                  sendMessage(Type.PLAYER_LOST_DUE_TO_BANKRUPTCY, player, creditor);
+                  removePlayer(player, creditor);
                   nextTurn();
                }
                else
@@ -318,7 +352,7 @@ public class ServerModel extends Model implements Runnable
             case TRADE_COMPLETED:
                if (state == State.TRADING && currentTrade != null) // both or neither should ever be true
                {
-                  completeTrade(player, (Boolean)message.getValue());
+                  completeTrade((Boolean)message.getValue());
                }
                else
                {
@@ -446,6 +480,8 @@ public class ServerModel extends Model implements Runnable
    
    private void sendInvalidModelState(ServerSideConnection connection)
    {
+      System.out.println("Invalid state for latest message: " + state);
+      
       server.sendObject(new ViewMessage(Type.MODEL_INVALID_STATE, null, null), connection);
    }
 
@@ -577,6 +613,14 @@ public class ServerModel extends Model implements Runnable
       }
       
       changePlayerFuel(player, -player.getFuel());
+      
+      Iterator<Debt> debtItr = debts.iterator();
+      
+      while (debtItr.hasNext())
+      {
+         if (debtItr.next().getDebtor() == player.getNumber())
+            debtItr.remove();
+      }
 
       if (playersRemaining == 1)
       {
@@ -639,26 +683,72 @@ public class ServerModel extends Model implements Runnable
       
       if (rent > 0)
       {
-         attemptToSettleDebt(player, node.getOwner(), rent);
+         addDebt(player, node.getOwner(), rent);
+         postDebtSettlementState = State.POST_ROLL;
+         attemptToSettleDebt();
       }
    }
    
-   private void attemptToSettleDebt(Player debtor, Player creditor, int rent)
+   private boolean isPlayerSettlingDebt(Player debtor)
    {
-      if (debtor.getCash() >= rent)
+      return !debts.isEmpty() && debts.get(0).getDebtor() == debtor.getNumber();
+   }
+   
+   private void addDebt(Player debtor, Player creditor, int amount)
+   {
+      currentCreditor = creditor.getNumber();
+      
+      for (int index = 0; index < debts.size(); index++)
       {
-         changePlayerCash(debtor, -rent);
-         changePlayerCash(creditor, rent);
+         Debt debt = debts.get(index);
          
-         debt = null;
-         setState(State.POST_ROLL);
+         if (debt.getDebtor() == debtor.getNumber())
+         {
+            debts.set(index, new Debt(debt.getDebtor(), debt.getAmount() + amount));
+            
+            return;
+         }
       }
-      else
+      
+      debts.add(new Debt(debtor, amount));
+   }
+   
+   private void attemptToSettleDebt()
+   {
+      // First resolve all debts where the player has enough cash already.
+      Iterator<Debt> debtItr = debts.iterator();
+      
+      while (debtItr.hasNext())
       {
-         debt = new Pair<Player, Integer>(creditor, rent);
-         sendMessage(Type.PLAYER_HAS_INSUFFICIENT_CASH, debtor, debt);
-         setState(State.SETTLING_DEBT);
+         Debt debt = debtItr.next();
+         Player debtor = playerMap.get(debt.getDebtor());
+         Player creditor = playerMap.get(currentCreditor);
+         int amount = debt.getAmount();
+         
+         if (debtor.getCash() >= amount)
+         {
+            changePlayerCash(debtor, -amount);
+            changePlayerCash(creditor, amount);
+            
+            debtItr.remove();
+         }
       }
+      
+      if (debts.isEmpty())
+      {
+         setState(postDebtSettlementState);
+         
+         return;
+      }
+      
+      // Then, if any debts remain, grab the first one and start the process.
+      Debt debt = debts.get(0);
+      Player debtor = playerMap.get(debt.getDebtor());
+      Player creditor = playerMap.get(currentCreditor);
+      int amount = debt.getAmount();
+      
+      sendMessage(Type.PLAYER_HAS_INSUFFICIENT_CASH, debtor, new Pair<Player, Integer>(creditor, amount));
+      setState(State.SETTLING_DEBT);
    }
    
    void changePlayerFuelStations(Player player, int amount)
@@ -930,7 +1020,7 @@ public class ServerModel extends Model implements Runnable
       messages.add(new Pair<ServerSideConnection, ModelMessage>(connection, modelMessage));
    }
 
-   private void completeTrade(Player player, boolean accepted)
+   private void completeTrade(boolean accepted)
    {
       Player from = playerMap.get(currentTrade.getFrom());
       Player to = playerMap.get(currentTrade.getTo());
@@ -973,30 +1063,14 @@ public class ServerModel extends Model implements Runnable
       
       currentTrade = null;
 
-      if (debt == null)
+      if (debts.isEmpty())
       {
          state = postTradeState;
          sendMessage(postTradeMessage);
       }
       else
       {
-         // Did the property causing the debt change hands?
-         Node node = player.getCurrentNode();
-         
-         if (player.equals(node.getOwner()) || node.getOwner() == null)
-         {
-            // Current player obtained node or the node was sold back to the League; cancel debt.
-            debt = null;
-            setState(State.POST_ROLL);
-            return;
-         }
-         else if (!debt.getFirst().equals(node.getOwner()))
-         {
-            // Some other player obtained node; transfer debt.
-            debt = new Pair<Player, Integer>(node.getOwner(), debt.getSecond());
-         }
-
-         attemptToSettleDebt(player, debt.getFirst(), debt.getSecond());
+         attemptToSettleDebt();
       }
    }
    
