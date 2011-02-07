@@ -286,6 +286,9 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       
       for (int ndx = 0; ndx < playerStateBoxes.length; ndx++)
       {
+         if (playerStateBoxes[ndx] == null)
+            continue;
+         
          Object playerState = playerStateBoxes[ndx].getSelectedItem();
          
          if (playerState == PlayerState.LOCAL)
@@ -329,6 +332,9 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       
       for (int ndx = 0; ndx < playerStateBoxes.length; ndx++)
       {
+         if (playerStateBoxes[ndx] == null)
+            continue;
+         
          Object playerState = playerStateBoxes[ndx].getSelectedItem();
          
          if (playerState == PlayerState.LOCAL)
