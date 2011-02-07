@@ -31,4 +31,10 @@ public class Pair<S, T> implements Serializable
    {
       return second;
    }
+   
+   @Override
+   public String toString()
+   {
+      return "[" + first.toString() + ", " + second.toString() + "]";
+   }
 }

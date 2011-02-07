@@ -76,6 +76,9 @@ public class RuleSet implements Serializable
    public static final Rule<Boolean> LASER_BATTLES_ALLOWED = new Rule<Boolean>("laser_battles_allowed", Boolean.class);
    public static final Rule<Integer> LASER_BATTLE_FUEL_COST = new Rule<Integer>("laser_battle_fuel_cost", Integer.class);
    public static final Rule<Integer> LASER_BATTLE_MAXIMUM_DISTANCE = new Rule<Integer>("laser_battle_maximum_distance", Integer.class);
+   public static final Rule<Integer> LASER_BATTLE_DAMAGE_COST = new Rule<Integer>("laser_battle_damage_cost", Integer.class);
+   public static final Rule<Boolean> LASERS_CAN_FIRE_FROM_START = new Rule<Boolean>("lasers_can_fire_from_start", Boolean.class);
+   public static final Rule<Boolean> LASERS_CAN_FIRE_AT_START = new Rule<Boolean>("lasers_can_fire_at_start", Boolean.class);
    public static final Rule<RedShiftRoll> RED_SHIFT_ROLL = new Rule<RedShiftRoll>("red_shift_roll", RedShiftRoll.class);
    public static final Rule<Boolean> BYPASS_ALLOWED = new Rule<Boolean>("bypass_allowed", Boolean.class);
    public static final Rule<Boolean> FUEL_AVAILABLE_ON_UNOWNED_NODE = new Rule<Boolean>("fuel_available_on_unowned_node", Boolean.class); // false for Apollo 13
@@ -104,6 +107,9 @@ public class RuleSet implements Serializable
       ruleNameMap.put(LASER_BATTLES_ALLOWED.name, LASER_BATTLES_ALLOWED);
       ruleNameMap.put(LASER_BATTLE_FUEL_COST.name, LASER_BATTLE_FUEL_COST);
       ruleNameMap.put(LASER_BATTLE_MAXIMUM_DISTANCE.name, LASER_BATTLE_MAXIMUM_DISTANCE);
+      ruleNameMap.put(LASER_BATTLE_DAMAGE_COST.name, LASER_BATTLE_DAMAGE_COST);
+      ruleNameMap.put(LASERS_CAN_FIRE_FROM_START.name, LASERS_CAN_FIRE_FROM_START);
+      ruleNameMap.put(LASERS_CAN_FIRE_AT_START.name, LASERS_CAN_FIRE_AT_START);
       ruleNameMap.put(RED_SHIFT_ROLL.name, RED_SHIFT_ROLL);
       ruleNameMap.put(BYPASS_ALLOWED.name, BYPASS_ALLOWED);
       ruleNameMap.put(FUEL_AVAILABLE_ON_UNOWNED_NODE.name, FUEL_AVAILABLE_ON_UNOWNED_NODE);

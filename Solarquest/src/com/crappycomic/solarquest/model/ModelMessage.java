@@ -37,14 +37,18 @@ public class ModelMessage implements Serializable
       NEGLIGENCE_TAKEOVER,
       CHOOSE_NODE_LOST_TO_LEAGUE,
       CHOOSE_NODE_WON_FROM_LEAGUE,
-      CHOOSE_NODE_WON_FROM_PLAYER
+      CHOOSE_NODE_WON_FROM_PLAYER,
+      FIRE_LASERS
    }
    
    /** The specific type of action taken by the {@link Player}. */
    private Type type;
    
+   /** The {@link Player} taking the action. */
+   private int player;
+   
    /**
-    * A {@link Type type}-dependant value further specifying the action taken by the {@link Player}.
+    * A {@link Type type}-dependent value further specifying the action taken by the {@link Player}.
     * Note: A {@link View} should not send any messages containing any objects from the
     * {@link com.crappycomic.solarquest.model} package&mdash;only their ID's and such.
     */
@@ -55,16 +59,22 @@ public class ModelMessage implements Serializable
    {
    }
    
-   /** Creates an instance with the given type and value. */
-   public ModelMessage(Type type, Serializable value)
+   /** Creates an instance with the given type, player, and value. */
+   public ModelMessage(Type type, int player, Serializable value)
    {
       this.type = type;
+      this.player = player;
       this.value = value;
    }
 
    public Type getType()
    {
       return type;
+   }
+   
+   public int getPlayer()
+   {
+      return player;
    }
    
    public Serializable getValue()

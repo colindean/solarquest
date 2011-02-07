@@ -5,12 +5,15 @@
 package com.crappycomic.solarquest.view;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Collection;
+import java.awt.event.ActionEvent;
+import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.Action;
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.crappycomic.solarquest.model.*;
 import com.crappycomic.solarquest.model.ModelMessage.Type;
@@ -26,6 +29,7 @@ public class ActionsPanel extends JPanel
       private void setFuelPrice(int fuelPrice)
       {
          this.fuelPrice = fuelPrice;
+         stateChanged(null);
       }
       
       @Override
@@ -48,6 +52,8 @@ public class ActionsPanel extends JPanel
    private GraphicView view;
    
    private Model model;
+   
+   private Player currentDebtor;
    
    private JPanel waitingForPlayerPanel;
    
@@ -108,6 +114,8 @@ public class ActionsPanel extends JPanel
    private Action sellNodeNormallyAction;
    
    private Action sellNodeForDebtSettlementAction;
+   
+   private Action fireLasersAction;
    
    private JLabel chooseAllowedMoveLabel;
    
@@ -185,7 +193,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.PLACE_FUEL_STATION);
+            view.sendMessage(Type.PLACE_FUEL_STATION, model.getCurrentPlayer());
          }
       };
       
@@ -196,7 +204,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.PURCHASE_FUEL_STATION);            
+            view.sendMessage(Type.PURCHASE_FUEL_STATION, model.getCurrentPlayer());            
          }
       };
       
@@ -207,7 +215,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.SELL_FUEL_STATION_NORMALLY);
+            view.sendMessage(Type.SELL_FUEL_STATION_NORMALLY, model.getCurrentPlayer());
          }
       };
       
@@ -219,8 +227,28 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             showChooseNodeActions("Choose a property to sell to the Federation League:",
-               model.getCurrentPlayer().getOwnedNodes(), Type.SELL_NODE_NORMALLY, true);
+               model.getCurrentPlayer().getOwnedNodes(),
+               Type.SELL_NODE_NORMALLY, model.getCurrentPlayer(), true, false);
          }
+      };
+      
+      fireLasersAction = new AbstractAction("Fire Lasers")
+      {
+         private static final long serialVersionUID = 0;
+         
+         @Override
+         public void actionPerformed(ActionEvent evt)
+         {
+            Set<Node> targetableNodes = new HashSet<Node>();
+            
+            for (Player player : model.getLaserTargetablePlayers())
+            {
+               targetableNodes.add(player.getCurrentNode());
+            }
+            
+            showChooseNodeActions("Choose a target for your lasers:",
+               targetableNodes, null, model.getCurrentPlayer(), true, false);
+         };
       };
       
       Action rollDiceAction = new AbstractAction("Roll Dice")
@@ -231,7 +259,7 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             switchPanel(null);
-            view.sendMessage(Type.NO_PRE_ROLL);
+            view.sendMessage(Type.NO_PRE_ROLL, model.getCurrentPlayer());
          }
       };
       
@@ -255,6 +283,8 @@ public class ActionsPanel extends JPanel
       preRollPanel.add(createButton(sellFuelStationNormallyAction));
       preRollPanel.add(Box.createVerticalStrut(GAP));
       preRollPanel.add(createButton(sellNodeNormallyAction));
+      preRollPanel.add(Box.createVerticalStrut(GAP));
+      preRollPanel.add(createButton(fireLasersAction));
       preRollPanel.add(Box.createVerticalGlue());
       preRollPanel.add(rollDiceButton = createButton(rollDiceAction));
 
@@ -265,7 +295,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.NEGLIGENCE_TAKEOVER);
+            view.sendMessage(Type.NEGLIGENCE_TAKEOVER, model.getCurrentPlayer());
          }
       };
       
@@ -277,7 +307,7 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             switchPanel(null);
-            view.sendMessage(Type.NO_PRE_LAND);
+            view.sendMessage(Type.NO_PRE_LAND, model.getCurrentPlayer());
          }
       };
       
@@ -287,6 +317,8 @@ public class ActionsPanel extends JPanel
       preLandPanel.add(createButton(tradeAction));
       preLandPanel.add(Box.createVerticalStrut(GAP));
       preLandPanel.add(createButton(negligenceTakeoverAction));
+      preLandPanel.add(Box.createVerticalStrut(GAP));
+      preLandPanel.add(createButton(fireLasersAction));
       preLandPanel.add(Box.createVerticalGlue());
       preLandPanel.add(createButton(preLandContinueButton));
       
@@ -297,7 +329,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.PURCHASE_NODE);            
+            view.sendMessage(Type.PURCHASE_NODE, model.getCurrentPlayer());            
          }
       };
       
@@ -309,7 +341,7 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             switchPanel(null);
-            view.sendMessage(Type.NO_POST_ROLL);
+            view.sendMessage(Type.NO_POST_ROLL, model.getCurrentPlayer());
          }
       };
       
@@ -340,7 +372,7 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             switchPanel(null);
-            view.sendMessage(Type.DECLARE_BANKRUPTCY);
+            view.sendMessage(Type.DECLARE_BANKRUPTCY, currentDebtor);
          }
       };
       
@@ -351,7 +383,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.SELL_FUEL_STATION_FOR_DEBT_SETTLEMENT);
+            view.sendMessage(Type.SELL_FUEL_STATION_FOR_DEBT_SETTLEMENT, currentDebtor);
          }
       };
       
@@ -363,7 +395,8 @@ public class ActionsPanel extends JPanel
          public void actionPerformed(ActionEvent evt)
          {
             showChooseNodeActions("Choose a property to sell to the Federation League:",
-               model.getCurrentPlayer().getOwnedNodes(), Type.SELL_NODE_FOR_DEBT_SETTLEMENT, true);
+               model.getCurrentPlayer().getOwnedNodes(),
+               Type.SELL_NODE_FOR_DEBT_SETTLEMENT, currentDebtor, true, false);
          }
       };
       
@@ -408,7 +441,7 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.PURCHASE_FUEL, (Integer)fuelSpinnerModel.getValue());
+            view.sendMessage(Type.PURCHASE_FUEL, model.getCurrentPlayer(), (Integer)fuelSpinnerModel.getValue());
          }
       };
       
@@ -454,7 +487,34 @@ public class ActionsPanel extends JPanel
                return;
             
             view.highlightNodes(null);
-            view.sendMessage(chooseNodeMessageType, chosenNode.getID());
+            
+            if (chooseNodeMessageType == null)
+            {
+               List<Player> targetablePlayers = model.getLaserTargetablePlayers();
+               Iterator<Player> targetablePlayersItr = targetablePlayers.iterator();
+               
+               while (targetablePlayersItr.hasNext())
+               {
+                  if (!targetablePlayersItr.next().getCurrentNode().equals(chosenNode))
+                     targetablePlayersItr.remove();
+               }
+               
+               List<Integer> targetedPlayers
+                  = new FireLasersDialog(view.getFrame(), targetablePlayers, model.getLaserBattleFuelCost(chosenNode)).getValue();
+               
+               if (targetedPlayers.isEmpty())
+               {
+                  switchPanel(previousPanel);
+               }
+               else
+               {
+                  view.sendMessage(Type.FIRE_LASERS, model.getCurrentPlayer(), (Serializable)targetedPlayers);
+               }
+            }
+            else
+            {
+               view.sendMessage(chooseNodeMessageType, model.getCurrentPlayer(), chosenNode.getID());
+            }
          }
       };
       
@@ -557,6 +617,12 @@ public class ActionsPanel extends JPanel
       return "Total: $" + price;
    }
    
+   void showGameOver()
+   {
+      // TODO: be more fancy?
+      switchPanel(null);
+   }
+   
    void showPreRollActions()
    {
       Player player = model.getCurrentPlayer();
@@ -568,6 +634,7 @@ public class ActionsPanel extends JPanel
          boolean fuelStationIsPurchaseable = model.isFuelStationPurchaseable();
          boolean fuelStationIsSalable = model.isFuelStationSalableNormally();
          boolean nodeIsSalable = model.isNodeSalableNormally();
+         boolean laserBattleIsAllowed = model.isLaserBattleAllowed();
          boolean fuelIsCritical = model.isFuelCritical();
          
          preRollLabel.setText(getPreRollLabelText(player));
@@ -581,6 +648,7 @@ public class ActionsPanel extends JPanel
          sellFuelStationNormallyAction.setEnabled(fuelStationIsSalable);
          sellFuelStationNormallyAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
          sellNodeNormallyAction.setEnabled(nodeIsSalable);
+         fireLasersAction.setEnabled(laserBattleIsAllowed);
          rollDiceButton.setBackground(fuelIsCritical ? CRITICAL_FUEL_EMERGENCY : null);
          
          switchPanel(preRollPanel);
@@ -601,11 +669,13 @@ public class ActionsPanel extends JPanel
       if (view.isPlayerLocal(player))
       {
          boolean negligenceTakeoverIsAllowed = model.isNegligenceTakeoverAllowed();
+         boolean laserBattleIsAllowed = model.isLaserBattleAllowed();
          
          preLandLabel.setText(getPreLandLabelText(player));
          
          negligenceTakeoverAction.setEnabled(negligenceTakeoverIsAllowed);
          negligenceTakeoverAction.putValue(Action.SHORT_DESCRIPTION, getNegligenceTakeoverActionTooltip(negligenceTakeoverIsAllowed, model.getNodePrice()));
+         fireLasersAction.setEnabled(laserBattleIsAllowed);
          
          switchPanel(preLandPanel);
       }
@@ -659,16 +729,16 @@ public class ActionsPanel extends JPanel
       }
    }
    
-   void showDebtSettlementActions(Pair<Player, Integer> debt)
+   void showDebtSettlementActions(Player debtor, Pair<Player, Integer> debt)
    {
-      Player player = model.getCurrentPlayer();
-
-      if (view.isPlayerLocal(player))
+      currentDebtor = debtor;
+      
+      if (view.isPlayerLocal(debtor))
       {
-         boolean fuelStationIsSalable = model.isFuelStationSalableForDebtSettlement();
-         boolean nodeIsSalable = model.isNodeSalableForDebtSettlement();
+         boolean fuelStationIsSalable = model.isFuelStationSalableForDebtSettlement(debtor);
+         boolean nodeIsSalable = model.isNodeSalableForDebtSettlement(debtor);
          
-         debtSettlementPlayersLabel.setText(getDebtSettlementPlayersLabelText(player, debt.getFirst()));
+         debtSettlementPlayersLabel.setText(getDebtSettlementPlayersLabelText(debtor, debt.getFirst()));
          debtSettlementAmountLabel.setText(getDebtSettlementAmountLabelText(debt.getSecond()));
          sellFuelStationForDebtSettlementAction.setEnabled(fuelStationIsSalable);
          sellFuelStationForDebtSettlementAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
@@ -678,7 +748,7 @@ public class ActionsPanel extends JPanel
       }
       else
       {
-         waitingForPlayerLabel.setText(getWaitingForPlayerLabelText(player));
+         waitingForPlayerLabel.setText(getWaitingForPlayerLabelText(debtor));
          waitingForActionLabel.setText("(settling $" + debt.getSecond() + " debt to " + debt.getFirst() + ")");
          
          switchPanel(waitingForPlayerPanel);
@@ -702,7 +772,7 @@ public class ActionsPanel extends JPanel
                @Override
                public void actionPerformed(ActionEvent evt)
                {
-                  view.sendMessage(Type.CHOOSE_ALLOWED_MOVE, node.getID());
+                  view.sendMessage(Type.CHOOSE_ALLOWED_MOVE, model.getCurrentPlayer(), node.getID());
                }
             };
             
@@ -741,10 +811,9 @@ public class ActionsPanel extends JPanel
       switchPanel(purchaseFuelPanel);
    }
    
-   void showChooseNodeActions(String labelText, Collection<Node> nodes, Type type, boolean canCancel)
+   void showChooseNodeActions(String labelText, Collection<Node> nodes,
+      Type type, Player player, boolean canCancel, boolean laserBattle)
    {
-      Player player = model.getCurrentPlayer();
-      
       if (view.isPlayerLocal(player))
       {
          choosableNodes = nodes;
@@ -752,7 +821,8 @@ public class ActionsPanel extends JPanel
          chosenNode = null;
          chooseNodePlayerLabel.setText(getPlayerLabelText(player));
          chooseNodeLabel.setText(getChooseNodeLabelText(labelText));
-         chooseNodeAction.putValue(Action.NAME, "Choose a Property");
+         chooseNodeAction.putValue(Action.NAME,
+            laserBattle ? "Choose a Target" : "Choose a Property");
          chooseNodeCancelButton.setVisible(canCancel);
          
          view.highlightNodes(nodes);

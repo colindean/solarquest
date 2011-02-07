@@ -162,12 +162,7 @@ public abstract class Model implements Serializable
          && RuleSet.isTransactionAvailable(ruleSet.getValue(RuleSet.FUEL_STATION_BUYBACK_AVAILABILITY), node);
    }
    
-   public boolean isFuelStationSalableForDebtSettlement()
-   {
-      return isFuelStationSalableForDebtSettlement(getCurrentPlayer());
-   }
-   
-   protected boolean isFuelStationSalableForDebtSettlement(Player player)
+   public boolean isFuelStationSalableForDebtSettlement(Player player)
    {
       return isFuelStationSalableAtAll(player);
    }
@@ -192,12 +187,7 @@ public abstract class Model implements Serializable
          && RuleSet.isTransactionAvailable(ruleSet.getValue(RuleSet.NODE_BUYBACK_AVAILABILITY), node);
    }
 
-   public boolean isNodeSalableForDebtSettlement()
-   {
-      return isNodeSalableForDebtSettlement(getCurrentPlayer());
-   }
-   
-   protected boolean isNodeSalableForDebtSettlement(Player player)
+   public boolean isNodeSalableForDebtSettlement(Player player)
    {
       return isNodeSalableAtAll(player);
    }
@@ -321,6 +311,69 @@ public abstract class Model implements Serializable
       // while the button itself excludes it
    }
 
+   public boolean isLaserBattleEverAllowed()
+   {
+      return ruleSet.getValue(RuleSet.LASER_BATTLES_ALLOWED);
+   }
+   
+   public boolean isLaserBattleAllowed()
+   {
+      return isLaserBattleAllowed(getCurrentPlayer());
+   }
+   
+   public abstract boolean isLaserBattleAllowed(Player player);
+
+   public List<Player> getLaserTargetablePlayers()
+   {
+      return getLaserTargetablePlayers(getCurrentPlayer());
+   }
+   
+   List<Player> getLaserTargetablePlayers(Player player)
+   {
+      List<Player> targetablePlayers = new ArrayList<Player>();
+      
+      // Can't fire from start node if rules don't allow it.
+      if (player.getCurrentNode().isStartNode()
+            && !ruleSet.getValue(RuleSet.LASERS_CAN_FIRE_FROM_START))
+         return targetablePlayers;
+      
+      int maximumDistance = player.getFuel() / ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST) - 1;
+      
+      maximumDistance = Math.min(maximumDistance, ruleSet.getValue(RuleSet.LASER_BATTLE_MAXIMUM_DISTANCE));
+      
+      // Can't fire if we don't even have enough fuel for a zero-distance shot.
+      if (maximumDistance < 0)
+         return targetablePlayers;
+      
+      for (Player otherPlayer : getPlayers())
+      {
+         // Can't fire on yourself because lasers don't point that way.
+         if (player.equals(otherPlayer))
+            continue;
+         
+         // Can't beat dead horses.
+         if (otherPlayer.isGameOver())
+            continue;
+         
+         // Can't fire at start node if rules don't allow it.
+         if (otherPlayer.getCurrentNode().isStartNode()
+               && !ruleSet.getValue(RuleSet.LASERS_CAN_FIRE_AT_START))
+            continue;
+         
+         // Can fire if other player is close enough.
+         if (board.getDistanceBetweenNodes(player.getCurrentNode(), otherPlayer.getCurrentNode()) <= maximumDistance)
+            targetablePlayers.add(otherPlayer);
+      }
+      
+      return targetablePlayers;
+   }
+   
+   public int getLaserBattleFuelCost(Node targetedNode)
+   {
+      return (board.getDistanceBetweenNodes(getCurrentPlayer().getCurrentNode(), targetedNode) + 1)
+         * ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST);
+   }
+   
    public void setRuleSet(RuleSet ruleSet)
    {
       this.ruleSet = ruleSet;

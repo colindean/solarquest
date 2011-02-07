@@ -22,6 +22,8 @@ public class ClientModel extends Model implements Serializable
    private View view;
    
    private Player currentPlayer;
+   
+   private boolean purchasedFuelAtCurrentNode;
 
    public String getDefaultView()
    {
@@ -54,12 +56,15 @@ public class ClientModel extends Model implements Serializable
             currentPlayer = player;
             break;
          case PLAYER_ADVANCED_TO_NODE:
+            purchasedFuelAtCurrentNode = false;
             player.setCurrentNode(node);
             break;
          case PLAYER_CHANGED_CASH:
             player.changeCash((Integer)value);
             break;
          case PLAYER_CHANGED_FUEL:
+            if ((Integer)value > 0)
+               purchasedFuelAtCurrentNode = true;
             player.changeFuel((Integer)value);
             break;
          case PLAYER_CHANGED_FUEL_STATIONS:
@@ -93,12 +98,17 @@ public class ClientModel extends Model implements Serializable
          case PLAYER_SOLD_FUEL_STATION:
             fuelStationsRemaining++;
             break;
+         case MODEL_POST_ROLL:
+            purchasedFuelAtCurrentNode = false;
+            break;
+         case PLAYER_FIRED_LASERS_AND_DESTROYED_A_SHIP:
+            playerMap.get(((Player)message.getValue()).getNumber()).setGameOver(true);
+            break;
          case MODEL_CHOOSING_NODE_LOST_TO_LEAGUE:
          case MODEL_CHOOSING_NODE_WON_FROM_LEAGUE:
          case MODEL_CHOOSING_NODE_WON_FROM_PLAYER:
          case MODEL_GAME_OVER:
          case MODEL_INVALID_STATE:
-         case MODEL_POST_ROLL:
          case MODEL_PRE_LAND:
          case PLAYER_DREW_CARD:
          case PLAYER_HAD_NO_NODE_TO_LOSE:
@@ -116,6 +126,9 @@ public class ClientModel extends Model implements Serializable
          case PLAYER_WON_DISPUTE_WITH_PLAYER:
          case TRADE_ACCEPTED:
          case TRADE_REJECTED:
+         case PLAYER_FIRED_LASERS_AND_MISSED:
+         case PLAYER_FIRED_LASERS_AND_CAUSED_DAMAGE:
+         case PLAYER_FIRED_LASERS:
             // Don't care
             break;
       }
@@ -139,5 +152,13 @@ public class ClientModel extends Model implements Serializable
    public String toString()
    {
       return defaultView + '\n' + players + '\n' + playerMap + '\n' + fuelStationsRemaining + '\n' + ruleSet.size() + '\n';
+   }
+   
+   @Override
+   public boolean isLaserBattleAllowed(Player player)
+   {
+      return isLaserBattleEverAllowed()
+         && !purchasedFuelAtCurrentNode
+         && !getLaserTargetablePlayers(player).isEmpty();
    }
 }

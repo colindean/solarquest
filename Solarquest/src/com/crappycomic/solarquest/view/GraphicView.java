@@ -162,6 +162,14 @@ public class GraphicView extends View
          }
       });
    }
+   
+   @Override
+   protected void gameOver()
+   {
+      super.gameOver();
+      
+      actionsPanel.showGameOver();
+   }
 
    @Override
    protected void playerAdvancedToNode(Player player, Node node)
@@ -316,9 +324,9 @@ public class GraphicView extends View
    }
 
    @Override
-   protected void playerRolled(Player player, Pair<Integer, Integer> dice)
+   protected void playerRolled(Player player, Pair<Integer, Integer> roll)
    {
-      statusPanel.appendText(player.getName() + " rolled " + dice.getFirst() + " and " + dice.getSecond() + ".");
+      statusPanel.appendText(player.getName() + " rolled " + roll.getFirst() + " and " + roll.getSecond() + ".");
    }
 
    @Override
@@ -354,11 +362,37 @@ public class GraphicView extends View
    {
       statusPanel.appendText(player.getName() + " won a dispute with another player and may take ownership of an owned property.");      
    }
+   
+   @Override
+   protected void playerFiredLasers(Player player, Pair<Integer, Integer> roll)
+   {
+      statusPanel.appendText(player.getName() + " fired lasers and rolled " + roll.getFirst() + " and " + roll.getSecond() + ".");
+   }
+   
+   @Override
+   protected void playerFiredLasersAndMissed(Player player, Player target)
+   {
+      statusPanel.appendText(player.getName() + " fired lasers and missed " + target.getName() + ".");
+   }
+   
+   @Override
+   protected void playerFiredLasersAndCausedDamage(Player player, Player target)
+   {
+      statusPanel.appendText(player.getName() + " fired lasers and damaged " + target.getName() + ".");
+   }
+   
+   @Override
+   protected void playerFiredLasersAndDestroyedAShip(Player player, Player target)
+   {
+      statusPanel.appendText(player.getName() + " fired lasers and DESTROYED " + target.getName() + "!");
+      boardPanel.updateBoard();
+      playersPanel.updateNode(target);
+   }
 
    @Override
-   protected void promptForDebtSettlement(Pair<Player, Integer> debt)
+   protected void promptForDebtSettlement(Player debtor, Pair<Player, Integer> debt)
    {
-      actionsPanel.showDebtSettlementActions(debt);
+      actionsPanel.showDebtSettlementActions(debtor, debt);
    }
 
    @Override
@@ -387,21 +421,24 @@ public class GraphicView extends View
    protected void promptForNodeLostToLeague()
    {
       actionsPanel.showChooseNodeActions("Choose a property to relinquish to the Federation League:",
-         model.getCurrentPlayer().getOwnedNodes(), Type.CHOOSE_NODE_LOST_TO_LEAGUE, false);
+         model.getCurrentPlayer().getOwnedNodes(),
+         Type.CHOOSE_NODE_LOST_TO_LEAGUE, model.getCurrentPlayer(), false, false);
    }
 
    @Override
    protected void promptForNodeWonFromLeague()
    {
       actionsPanel.showChooseNodeActions("Choose a property to obtain from the Federation League:",
-         model.getUnownedNodes(), Type.CHOOSE_NODE_WON_FROM_LEAGUE, false);
+         model.getUnownedNodes(),
+         Type.CHOOSE_NODE_WON_FROM_LEAGUE, model.getCurrentPlayer(), false, false);
    }
 
    @Override
    protected void promptForNodeWonFromPlayer()
    {
       actionsPanel.showChooseNodeActions("Choose a property to obtain from another player:",
-         model.getOwnedNodes(model.getCurrentPlayer()), Type.CHOOSE_NODE_WON_FROM_PLAYER, false);
+         model.getOwnedNodes(model.getCurrentPlayer()),
+         Type.CHOOSE_NODE_WON_FROM_PLAYER, model.getCurrentPlayer(), false, false);
    }
 
    @Override
@@ -412,7 +449,7 @@ public class GraphicView extends View
 
       statusPanel.appendText(accept ? "Trade accepted:" : "Trade rejected:");
       statusPanel.appendText(trade.toString());
-      sendMessage(Type.TRADE_COMPLETED, accept);
+      sendMessage(Type.TRADE_COMPLETED, trade.getTo(), accept);
    }
 
    @Override

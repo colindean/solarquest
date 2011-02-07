@@ -139,7 +139,7 @@ public class TradeDialog extends JDialog
             Trade trade = getValue();
             
             if (trade != null)
-               view.sendMessage(Type.TRADE, trade);
+               view.sendMessage(Type.TRADE, trade.getFrom(), trade);
          }
       });
       

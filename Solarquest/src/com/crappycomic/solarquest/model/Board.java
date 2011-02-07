@@ -15,6 +15,8 @@ public class Board implements Serializable
 
    private Node startNode;
    
+   private int[][] adjacencyMatrix;
+   
    Collection<Node> getNodes()
    {
       return Collections.unmodifiableCollection(nodes.values());
@@ -175,53 +177,58 @@ public class Board implements Serializable
    
    void initializeAdjacencyMatrix()
    {
-      int[][] matrix = new int[nodes.size()][];
+      adjacencyMatrix = new int[nodes.size()][];
       
-      for (int row = 0; row < matrix.length; row++)
+      for (int row = 0; row < adjacencyMatrix.length; row++)
       {
-         matrix[row] = new int[matrix.length];
-         Arrays.fill(matrix[row], -1);
+         adjacencyMatrix[row] = new int[adjacencyMatrix.length];
+         Arrays.fill(adjacencyMatrix[row], -1);
          
          // Each node is 0 away from itself
-         matrix[row][row] = 0;
+         adjacencyMatrix[row][row] = 0;
       }
       
       for (Node from : nodes.values())
       {
          for (Node to : from.getDestinations())
          {
-            matrix[from.getIndex()][to.getIndex()] = matrix[to.getIndex()][from.getIndex()] = 1;
+            adjacencyMatrix[from.getIndex()][to.getIndex()] = adjacencyMatrix[to.getIndex()][from.getIndex()] = 1;
          }
       }
       
-      for (int dist = 1; dist < matrix.length; dist++)
+      for (int dist = 1; dist < adjacencyMatrix.length; dist++)
       {
-         for (int row = 0; row < matrix.length; row++)
+         for (int row = 0; row < adjacencyMatrix.length; row++)
          {
-            for (int col = 0; col < matrix.length; col++)
+            for (int col = 0; col < adjacencyMatrix.length; col++)
             {
-               if (matrix[row][col] == dist)
+               if (adjacencyMatrix[row][col] == dist)
                {
-                  for (int col2 = 0; col2 < matrix.length; col2++)
+                  for (int col2 = 0; col2 < adjacencyMatrix.length; col2++)
                   {
-                     if (matrix[col][col2] == 1 && matrix[row][col2] == -1)
-                        matrix[row][col2] = dist + 1;
+                     if (adjacencyMatrix[col][col2] == 1 && adjacencyMatrix[row][col2] == -1)
+                        adjacencyMatrix[row][col2] = dist + 1;
                   }
                }
             }
          }
       }
       
-//      printAdjacencyMatrix(matrix);
+//      printAdjacencyMatrix();
+   }
+   
+   int getDistanceBetweenNodes(Node from, Node to)
+   {
+      return adjacencyMatrix[from.getIndex()][to.getIndex()];
    }
 
    @SuppressWarnings("unused")
-   private void printAdjacencyMatrix(int[][] matrix)
+   private void printAdjacencyMatrix()
    {
-      for (int row = 0; row < matrix.length; row++)
+      for (int row = 0; row < adjacencyMatrix.length; row++)
       {
-         for (int col = 0; col < matrix.length; col++)
-            System.out.print(matrix[row][col] + "\t");
+         for (int col = 0; col < adjacencyMatrix.length; col++)
+            System.out.print(adjacencyMatrix[row][col] + "\t");
          
          System.out.println();
       }

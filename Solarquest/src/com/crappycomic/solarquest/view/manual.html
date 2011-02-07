@@ -157,6 +157,31 @@ dt
 <p>When a player rolls {red_shift_roll}, he or she does not move, but instead
   draws a Red Shift card and follows the directions shown.</p>
 
+<h2>Laser Battles</h2>
+
+<p><em>Under the current rules, laser battles are {laser_battles_allowed}.</em></p>
+
+<p>When allowed by the current rules, players may attack each other with
+  ship-to-ship lasers. Players may attack before refueling and before rolling
+  the dice or after moving, but before paying rent.</p>
+
+<p>Players may attack ships up to {laser_battle_maximum_distance} spaces away,
+  including ships on the same space as the player. Lasers draw a lot of power,
+  and use more power over greater distances. This consumes fuel at the rate of
+  {laser_battle_fuel_cost} hydrons per space of distance (plus one, so
+  attacking ships on the same space costs {laser_battle_fuel_cost} hydrons).
+  Players can fire at multiple ships on the same space at once for no
+  additional fuel cost.</p>
+
+<p>During an attack, the attacker rolls the dice. If the attacker rolls
+  doubles, the shot has hit and damaged the target ship(s). Each player that
+  suffers damage must pay the attacker {laser_battle_damage_cost} Federons for
+  each pip on the dice. If the attacker rolls double {die_pips}, the fully
+  powered laser <em>destroys the ship(s) that it hits</em>. The players,
+  without their ships, immediately surrender their possessions to the attacker
+  and are out of the game. If the attacker does not roll doubles, the shot
+  misses with no ill effects and play continues.</p>
+
 <h2>Winning the Game</h2>
 
 <p>The last player standing is the winner. Alternately, players can agree on a
@@ -173,6 +198,8 @@ dt
     moon with fewer than {minimum_fuel} hydrons of fuel.</li>
   <li>Drawing a Red Shift card that requires the use of more fuel than the
     player has available.</li>
+  <li>Being destroyed by a fully powered laser shot, in games where laser
+    battles are allowed.</li>
 </ul>
 
 <p>When declaring bankruptcy, everything the player owned becomes the property

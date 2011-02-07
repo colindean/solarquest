@@ -125,7 +125,7 @@ public abstract class View
             playerDrewCard(message.getPlayer(), (Card)message.getValue());
             break;
          case PLAYER_HAS_INSUFFICIENT_CASH:
-            promptForDebtSettlement((Pair<Player, Integer>)message.getValue());
+            promptForDebtSettlement(message.getPlayer(), (Pair<Player, Integer>)message.getValue());
             break;
          case PLAYER_WON:
             playerWon(message.getPlayer());
@@ -157,6 +157,18 @@ public abstract class View
          case PLAYER_HAD_NO_NODE_TO_WIN:
             playerHadNoNodeToWin(message.getPlayer());
             break;
+         case PLAYER_FIRED_LASERS:
+            playerFiredLasers(message.getPlayer(), (Pair<Integer, Integer>)message.getValue());
+            break;
+         case PLAYER_FIRED_LASERS_AND_MISSED:
+            playerFiredLasersAndMissed(message.getPlayer(), (Player)message.getValue());
+            break;
+         case PLAYER_FIRED_LASERS_AND_CAUSED_DAMAGE:
+            playerFiredLasersAndCausedDamage(message.getPlayer(), (Player)message.getValue());
+            break;
+         case PLAYER_FIRED_LASERS_AND_DESTROYED_A_SHIP:
+            playerFiredLasersAndDestroyedAShip(message.getPlayer(), (Player)message.getValue());
+            break;
       }
       
       lastMessage = message;
@@ -187,7 +199,7 @@ public abstract class View
 
    protected abstract void playerWonDisputeWithPlayer(Player player);
 
-   protected abstract void playerRolled(Player player, Pair<Integer, Integer> dice);
+   protected abstract void playerRolled(Player player, Pair<Integer, Integer> roll);
 
    protected abstract void playerRemainedStationary(Player player);
 
@@ -225,13 +237,21 @@ public abstract class View
    
    protected abstract void playerHadNoNodeToLose(Player player);
 
+   protected abstract void playerFiredLasers(Player player, Pair<Integer, Integer> roll);
+   
+   protected abstract void playerFiredLasersAndMissed(Player player, Player target);
+   
+   protected abstract void playerFiredLasersAndCausedDamage(Player player, Player target);
+   
+   protected abstract void playerFiredLasersAndDestroyedAShip(Player player, Player target);
+   
    protected abstract void promptForPreRollActions();
    
    protected abstract void promptForPreLandActions();
 
    protected abstract void promptForPostRollActions();
 
-   protected abstract void promptForDebtSettlement(Pair<Player, Integer> debt);
+   protected abstract void promptForDebtSettlement(Player debtor, Pair<Player, Integer> debt);
    
    protected abstract void promptForTradeDecision(Trade trade);
    
@@ -245,14 +265,19 @@ public abstract class View
    
    public abstract void receiveMessage(ViewMessage message);
    
-   protected void sendMessage(ModelMessage.Type type)
+   protected void sendMessage(ModelMessage.Type type, Player player)
    {
-      sendMessage(type, null);
+      sendMessage(type, player, null);
    }
    
-   protected void sendMessage(ModelMessage.Type type, Serializable value)
+   protected void sendMessage(ModelMessage.Type type, Player player, Serializable value)
    {
-      client.sendObject(new ModelMessage(type, value));
+      sendMessage(type, player.getNumber(), value);
+   }
+   
+   protected void sendMessage(ModelMessage.Type type, int player, Serializable value)
+   {
+      client.sendObject(new ModelMessage(type, player, value));
    }
    
    protected void invalidModelState()

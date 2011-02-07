@@ -6,10 +6,12 @@ package com.crappycomic.solarquest.model;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import com.crappycomic.solarquest.net.*;
-import com.crappycomic.solarquest.view.*;
+import com.crappycomic.solarquest.net.Server;
+import com.crappycomic.solarquest.net.ServerSideConnection;
+import com.crappycomic.solarquest.view.ViewMessage;
 import com.crappycomic.solarquest.view.ViewMessage.Type;
 
 public class ServerModel extends Model implements Runnable
@@ -123,6 +125,7 @@ public class ServerModel extends Model implements Runnable
       new Thread(this).start();
    }
    
+   @SuppressWarnings("unchecked")
    @Override
    public void run()
    {
@@ -134,10 +137,8 @@ public class ServerModel extends Model implements Runnable
       while (state != State.GAME_OVER)
       {
          Pair<ServerSideConnection, ModelMessage> pair;
-         ServerSideConnection connection = null;
-         ModelMessage message = null;
-         Player player = getCurrentPlayer();
-         Node node = player.getCurrentNode();
+         ServerSideConnection connection;
+         ModelMessage message;
          
          try
          {
@@ -150,7 +151,9 @@ public class ServerModel extends Model implements Runnable
             break;
          }
          
-         // TODO: does "no lasers may be fired on Earth" mean "from Earth," "at Earth," or both?
+         Player player = playerMap.get(message.getPlayer());
+         Node node = player.getCurrentNode();
+         
          switch (message.getType())
          {
             case NO_PRE_ROLL:
@@ -425,6 +428,27 @@ public class ServerModel extends Model implements Runnable
                   relinquishNode(chosenNode.getOwner(), chosenNode);
                   obtainNode(player, chosenNode);
                   setState(State.POST_ROLL);
+               }
+               else
+               {
+                  sendInvalidModelState(connection);
+               }
+               break;
+            }
+            case FIRE_LASERS:
+            {
+               List<Integer> targetedPlayerNumbers = (List<Integer>)message.getValue();
+               List<Player> targetedPlayers = new ArrayList<Player>();
+               
+               for (int targetedPlayerNumber : targetedPlayerNumbers)
+               {
+                  targetedPlayers.add(playerMap.get(targetedPlayerNumber));
+               }
+               
+               if (isLaserBattleAllowed(player)
+                  && getLaserTargetablePlayers(player).containsAll(targetedPlayers))
+               {
+                  fireLasers(player, targetedPlayers);
                }
                else
                {
@@ -760,6 +784,15 @@ public class ServerModel extends Model implements Runnable
       sendMessage(Type.PLAYER_CHANGED_FUEL_STATIONS, player, amount);
    }
    
+   private Pair<Integer, Integer> rollDice()
+   {
+      int diePips = ruleSet.getValue(RuleSet.DIE_PIPS);
+      int die1 = random.nextInt(diePips) + 1;
+      int die2 = random.nextInt(diePips) + 1;
+      
+      return new Pair<Integer, Integer>(die1, die2);
+   }
+   
    void roll()
    {
       roll(players.get(currentPlayer));
@@ -778,13 +811,11 @@ public class ServerModel extends Model implements Runnable
    /** if useFuel is false, a Red Shift is impossible */
    void roll(Player player, int rollMultiplier, boolean allowRedShiftAndUseFuel)
    {
-      int diePips = ruleSet.getValue(RuleSet.DIE_PIPS);
-      int die1 = random.nextInt(diePips) + 1;
-      int die2 = random.nextInt(diePips) + 1;
+      Pair<Integer, Integer> roll = rollDice();
+      int die1 = roll.getFirst();
+      int die2 = roll.getSecond();
       
-      sendMessage(Type.PLAYER_ROLLED, player, new Pair<Integer, Integer>(die1, die2));
-      
-      int roll = (die1 + die2) * rollMultiplier;
+      sendMessage(Type.PLAYER_ROLLED, player, roll);
       
       if (allowRedShiftAndUseFuel && RuleSet.isRedShift(ruleSet.getValue(RuleSet.RED_SHIFT_ROLL), ruleSet.getValue(RuleSet.DIE_PIPS), die1, die2))
       {
@@ -796,7 +827,7 @@ public class ServerModel extends Model implements Runnable
          {
             action.perform(this, player);
             
-            // Break out if player lost the model due to the Red Shift
+            // Break out if player lost the game due to the Red Shift
             if (player.isGameOver())
                break;
          }
@@ -807,11 +838,12 @@ public class ServerModel extends Model implements Runnable
       boolean useFuel = allowRedShiftAndUseFuel && player.getCurrentNode().usesFuel();
       
       Set<Node> allowedMoves;
+      int multipledRoll = (die1 + die2) * rollMultiplier;
       
-      if (useFuel && roll > player.getFuel())
+      if (useFuel && multipledRoll > player.getFuel())
          allowedMoves = Collections.emptySet();
       else
-         allowedMoves = board.getAllowedMoves(player.getCurrentNode(), roll);
+         allowedMoves = board.getAllowedMoves(player.getCurrentNode(), multipledRoll);
       
       if (allowedMoves.isEmpty())
       {
@@ -821,7 +853,7 @@ public class ServerModel extends Model implements Runnable
       else if (allowedMoves.size() == 1)
       {
          if (useFuel)
-            changePlayerFuel(player, -roll);
+            changePlayerFuel(player, -multipledRoll);
          advancePlayerToNode(player, allowedMoves.iterator().next());
       }
       else
@@ -1100,20 +1132,60 @@ public class ServerModel extends Model implements Runnable
 
    private boolean isPreLandRequired(Player player, Node node)
    {
-      return isNegligenceTakeoverAllowed(player, node) || isLaserBattleAllowed(); // TODO: add params for efficiency
+      return isNegligenceTakeoverAllowed(player, node) || isLaserBattleAllowed(player);
    }
    
-   public boolean isLaserBattleEverAllowed()
+   @Override
+   public boolean isLaserBattleAllowed(Player player)
    {
-      return ruleSet.getValue(RuleSet.LASER_BATTLES_ALLOWED);
+      return isLaserBattleEverAllowed()
+         && ((state == State.PRE_ROLL && !purchasedFuelDuringPreRoll) || state == State.PRE_LAND)
+         && !getLaserTargetablePlayers(player).isEmpty();
    }
    
-   public boolean isLaserBattleAllowed()
+   private void fireLasers(Player player, List<Player> targetedPlayers)
    {
-      // TODO: add fuel and distance check
-      return isLaserBattleEverAllowed() && ((state == State.PRE_ROLL && !purchasedFuelDuringPreRoll) || state == State.PRE_LAND);
+      if (targetedPlayers.isEmpty())
+         return;
+      
+      Pair<Integer, Integer> roll = rollDice();
+      int die1 = roll.getFirst();
+      int die2 = roll.getSecond();
+      int distance = board.getDistanceBetweenNodes(player.getCurrentNode(), targetedPlayers.get(0).getCurrentNode());
+      
+      sendMessage(Type.PLAYER_FIRED_LASERS, player, roll);
+      
+      changePlayerFuel(player, -(distance + 1) * ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST));
+      
+      for (Player targetedPlayer : targetedPlayers)
+      {
+         if (die1 == ruleSet.getValue(RuleSet.DIE_PIPS) && die2 == die1)
+         {
+            sendMessage(Type.PLAYER_FIRED_LASERS_AND_DESTROYED_A_SHIP, player, targetedPlayer);
+            removePlayer(targetedPlayer, player);
+         }
+         else if (die1 == die2)
+         {
+            sendMessage(Type.PLAYER_FIRED_LASERS_AND_CAUSED_DAMAGE, player, targetedPlayer);
+            addDebt(targetedPlayer, player, ruleSet.getValue(RuleSet.LASER_BATTLE_DAMAGE_COST) * (die1 + die2));
+         }
+         else
+         {
+            sendMessage(Type.PLAYER_FIRED_LASERS_AND_MISSED, player, targetedPlayer);
+         }
+      }
+      
+      if (debts.isEmpty())
+      {
+         setState(state);
+      }
+      else
+      {
+         postDebtSettlementState = state;
+         attemptToSettleDebt();
+      }
    }
-
+   
    public void setServer(Server server)
    {
       this.server = server;
