@@ -66,6 +66,7 @@ public class RuleSet implements Serializable
    public static final Rule<Integer> LAND_ON_START_CASH = new Rule<Integer>("land_on_start_cash", Integer.class);
    public static final Rule<TransactionAvailability> FUEL_STATION_PURCHASE_AVAILABILITY = new Rule<TransactionAvailability>("fuel_station_purchase_availability", TransactionAvailability.class);
    public static final Rule<TransactionAvailability> FUEL_STATION_BUYBACK_AVAILABILITY = new Rule<TransactionAvailability>("fuel_station_buyback_availability", TransactionAvailability.class);
+   public static final Rule<Boolean> CAN_PLACE_FUEL_STATIONS_ON_ANY_NODE = new Rule<Boolean>("can_place_fuel_stations_on_any_node", Boolean.class);
    public static final Rule<TransactionAvailability> NODE_BUYBACK_AVAILABILITY = new Rule<TransactionAvailability>("node_buyback_availability", TransactionAvailability.class);
    public static final Rule<Integer> FUEL_STATION_PRICE = new Rule<Integer>("fuel_station_price", Integer.class);
    public static final Rule<Integer> FUEL_PRICE_ON_START = new Rule<Integer>("fuel_price_on_start", Integer.class);
@@ -97,6 +98,7 @@ public class RuleSet implements Serializable
       ruleNameMap.put(LAND_ON_START_CASH.name, LAND_ON_START_CASH);
       ruleNameMap.put(FUEL_STATION_PURCHASE_AVAILABILITY.name, FUEL_STATION_PURCHASE_AVAILABILITY);
       ruleNameMap.put(FUEL_STATION_BUYBACK_AVAILABILITY.name, FUEL_STATION_BUYBACK_AVAILABILITY);
+      ruleNameMap.put(CAN_PLACE_FUEL_STATIONS_ON_ANY_NODE.name, CAN_PLACE_FUEL_STATIONS_ON_ANY_NODE);
       ruleNameMap.put(NODE_BUYBACK_AVAILABILITY.name, NODE_BUYBACK_AVAILABILITY);
       ruleNameMap.put(FUEL_STATION_PRICE.name, FUEL_STATION_PRICE);
       ruleNameMap.put(FUEL_PRICE_ON_START.name, FUEL_PRICE_ON_START);

@@ -243,9 +243,14 @@ public class ServerModel extends Model implements Runnable
                }
                break;
             case PLACE_FUEL_STATION:
-               if ((state == State.PRE_ROLL || state == State.POST_ROLL) && isFuelStationPlaceable(player, node))
+            {
+               Node chosenNode = board.getNode((String)message.getValue());
+               
+               if ((state == State.PRE_ROLL || state == State.POST_ROLL)
+                  && player.getFuelStations() > 0
+                  && getFuelStationPlaceableNodes(player).contains(chosenNode))
                {
-                  placeFuelStation(player, node);
+                  placeFuelStation(player, chosenNode);
                   setState(state);
                }
                else
@@ -253,6 +258,7 @@ public class ServerModel extends Model implements Runnable
                   sendInvalidModelState(connection);
                }
                break;
+            }
             case CHOOSE_ALLOWED_MOVE:
             {
                String chosenMove = (String)message.getValue();

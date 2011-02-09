@@ -193,7 +193,9 @@ public class ActionsPanel extends JPanel
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            view.sendMessage(Type.PLACE_FUEL_STATION, model.getCurrentPlayer());
+            showChooseNodeActions("Choose a property for the new fuel station:",
+               model.getFuelStationPlaceableNodes(model.getCurrentPlayer()),
+               Type.PLACE_FUEL_STATION, model.getCurrentPlayer(), true, false);
          }
       };
       
@@ -816,18 +818,30 @@ public class ActionsPanel extends JPanel
    {
       if (view.isPlayerLocal(player))
       {
-         choosableNodes = nodes;
          chooseNodeMessageType = type;
-         chosenNode = null;
-         chooseNodePlayerLabel.setText(getPlayerLabelText(player));
-         chooseNodeLabel.setText(getChooseNodeLabelText(labelText));
-         chooseNodeAction.putValue(Action.NAME,
-            laserBattle ? "Choose a Target" : "Choose a Property");
-         chooseNodeCancelButton.setVisible(canCancel);
          
-         view.highlightNodes(nodes);
-         
-         switchPanel(chooseNodePanel);
+         if (nodes.size() == 1)
+         {
+            // Skip showing the panel if there's only one node.
+            chosenNode = nodes.iterator().next();
+            previousPanel = currentPanel;
+            
+            chooseNodeAction.actionPerformed(null);
+         }
+         else
+         {
+            choosableNodes = nodes;
+            chosenNode = null;
+            chooseNodePlayerLabel.setText(getPlayerLabelText(player));
+            chooseNodeLabel.setText(getChooseNodeLabelText(labelText));
+            chooseNodeAction.putValue(Action.NAME,
+               laserBattle ? "Choose a Target" : "Choose a Property");
+            chooseNodeCancelButton.setVisible(canCancel);
+            
+            view.highlightNodes(nodes);
+            
+            switchPanel(chooseNodePanel);
+         }
       }
       else
       {

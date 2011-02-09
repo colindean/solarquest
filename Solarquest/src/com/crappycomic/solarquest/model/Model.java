@@ -240,17 +240,36 @@ public abstract class Model implements Serializable
          && player.getFuel() < getMaximumFuel();
    }
    
+   public List<Node> getFuelStationPlaceableNodes(Player player)
+   {
+      boolean canPlaceOnAnyNode = ruleSet.getValue(RuleSet.CAN_PLACE_FUEL_STATIONS_ON_ANY_NODE);
+      List<Node> nodes = new ArrayList<Node>();
+      
+      for (Node node : player.getOwnedNodes())
+      {
+         if (!node.hasFuelStation() && node.canHaveFuelStation())
+         {
+            if (canPlaceOnAnyNode || player.getCurrentNode().equals(node))
+               nodes.add(node);
+         }
+      }
+      
+      return Collections.unmodifiableList(nodes);
+   }
+   
    public boolean isFuelStationPlaceable()
    {
       Player player = getCurrentPlayer();
-      Node node = player.getCurrentNode();
       
-      return isFuelStationPlaceable(player, node);
+      return isFuelStationPlaceable(player);
    }
    
-   protected boolean isFuelStationPlaceable(Player player, Node node)
+   protected boolean isFuelStationPlaceable(Player player)
    {
-      return !node.hasFuelStation() && node.canHaveFuelStation() && player.equals(node.getOwner()) && player.getFuelStations() > 0;
+      if (player.getFuelStations() <= 0)
+         return false;
+      
+      return !getFuelStationPlaceableNodes(player).isEmpty();
    }
    
    public boolean isFuelStationPurchaseable()
