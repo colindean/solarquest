@@ -4,7 +4,11 @@
 
 package com.crappycomic.solarquest.view;
 
+import java.awt.Color;
+import java.awt.event.*;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import com.crappycomic.solarquest.model.*;
 
@@ -13,9 +17,11 @@ public class PlayerPanel extends JPanel
 {
    private static final long serialVersionUID = 0;
    
+   private static final int BORDER_WIDTH = 3;
+   
    private GraphicView view;
    
-   private JLabel locationLabel;
+   private Player player;
    
    private JLabel cashLabel;
    
@@ -25,31 +31,37 @@ public class PlayerPanel extends JPanel
    
    private JLabel totalWorthLabel;
    
+   private MouseListener mouseListener;
+   
    PlayerPanel(GraphicView view, Model model, Player player)
    {
       this.view = view;
+      this.player = player;
       
-      add(new PlayerToken(player.getNumber()));
-      add(new JLabel(player.getName()));
-      add(locationLabel = new JLabel(getLocationLabelText(player)));
+      Color borderColor = PlayerToken.PLAYER_COLORS[player.getNumber()].darker();
+      
+      Border outsideBorder = BorderFactory.createLineBorder(borderColor, BORDER_WIDTH);
+      Border insideBorder = BorderFactory.createEmptyBorder(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH);
+      
+      outsideBorder = BorderFactory.createTitledBorder(outsideBorder, player.getName());
+      
+      setBorder(BorderFactory.createCompoundBorder(outsideBorder, insideBorder));
+      
+      setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      
       add(cashLabel = new JLabel(getCashLabelText(player.getCash())));
       add(fuelLabel = new JLabel(getFuelLabelText(player.getFuel())));
       add(fuelStationLabel = new JLabel(getFuelStationsLabelText(player.getFuelStations())));
       add(totalWorthLabel = new JLabel(getTotalWorthLabelText(model.getTotalWorth(player))));
-   }
-   
-   private String getLocationLabelText(Player player)
-   {
-      if (player.isGameOver())
+      
+      addMouseListener(mouseListener = new MouseAdapter()
       {
-         return "Game Over";
-      }
-      else
-      {
-         Node node = player.getCurrentNode();
-         
-         return "Location: " + (node == null ? "Unknown" : view.getNodeDisplayName(node.getID()));
-      }
+         @Override
+         public void mouseClicked(MouseEvent evt)
+         {
+            PlayerPanel.this.view.centerOnNode(PlayerPanel.this.player.getCurrentNode());
+         }
+      });
    }
    
    private static String getCashLabelText(int cash)
@@ -71,12 +83,45 @@ public class PlayerPanel extends JPanel
    {
       return "Total Worth: $" + totalWorth;
    }
-
-   void updateNode(Player player)
+   
+   private String getToolTipText(Node node)
    {
-      locationLabel.setText(getLocationLabelText(player));
+      if (node == null)
+         return "Out of the Solar System";
+      
+      switch (node.getType())
+      {
+         case SPACE:
+         case WELL_ORBIT:
+         case WELL_PULL:
+            return "In " + view.getNodeDisplayName(node.getID());
+         case SOLID:
+            return "On " + view.getNodeDisplayName(node.getID());
+         case DOCK:
+         case LAB:
+         case STATION:
+            return "At " + view.getNodeDisplayName(node.getID());
+      }
+      
+      return "Somewhere Out There";
    }
    
+   void updateNode(Node node)
+   {
+      setToolTipText(getToolTipText(node));
+   }
+
+   void gameOver()
+   {
+      removeAll();
+      removeMouseListener(mouseListener);
+      setToolTipText(null);
+      
+      add(new JLabel("Game Over"));
+      
+      repaint();
+   }
+
    void updateCash(int cash)
    {
       cashLabel.setText(getCashLabelText(cash));

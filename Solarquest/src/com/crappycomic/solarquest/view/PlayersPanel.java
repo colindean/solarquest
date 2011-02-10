@@ -37,13 +37,19 @@ public class PlayersPanel extends JPanel
       {
          PlayerPanel panel = new PlayerPanel(view, model, player);
          panelMap.put(player, panel);
+         panel.updateNode(player.getCurrentNode());
          add(panel);
       }
    }
 
    void updateNode(Player player)
    {
-      panelMap.get(player).updateNode(player);
+      panelMap.get(player).updateNode(player.getCurrentNode());
+   }
+   
+   void gameOver(Player player)
+   {
+      panelMap.get(player).gameOver();
    }
    
    void updateCash(Player player, int cash)

@@ -246,8 +246,7 @@ public class GraphicView extends View
    {
       statusPanel.appendText(player.getName() + " has declared bankruptcy and has lost.");
       boardPanel.updateBoard();
-      playersPanel.updateNode(player);
-      playersPanel.updateTotalWorth(player);
+      playersPanel.gameOver(player);
    }
 
    @Override
@@ -255,8 +254,7 @@ public class GraphicView extends View
    {
       statusPanel.appendText(player.getName() + " was forced to move with insufficient fuel and has lost.");
       boardPanel.updateBoard();
-      playersPanel.updateNode(player);
-      playersPanel.updateTotalWorth(player);
+      playersPanel.gameOver(player);
    }
 
    @Override
@@ -264,8 +262,7 @@ public class GraphicView extends View
    {
       statusPanel.appendText(player.getName() + " was stranded due to critical fuel and has lost.");
       boardPanel.updateBoard();
-      playersPanel.updateNode(player);
-      playersPanel.updateTotalWorth(player);
+      playersPanel.gameOver(player);
    }
 
    @Override
@@ -386,7 +383,7 @@ public class GraphicView extends View
    {
       statusPanel.appendText(player.getName() + " fired lasers and DESTROYED " + target.getName() + "!");
       boardPanel.updateBoard();
-      playersPanel.updateNode(target);
+      playersPanel.gameOver(target);
    }
 
    @Override
@@ -412,7 +409,7 @@ public class GraphicView extends View
    {
       Node node = model.getCurrentPlayer().getCurrentNode();
       
-      boardPanel.center(getNodeCoords(node.getID()), true);
+      centerOnNode(node);
       actionsPanel.showPreRollActions();
       nodePanel.updateNode(node);
    }
@@ -520,6 +517,12 @@ public class GraphicView extends View
       NodeView nodeView = nodeViews.get(id);
       
       return nodeView == null ? new Point(0, 0) : nodeView.getCoords();
+   }
+   
+   void centerOnNode(Node node)
+   {
+      if (node != null)
+         boardPanel.center(getNodeCoords(node.getID()), true);
    }
    
    Color getDeedGroupDisplayColor(String id)

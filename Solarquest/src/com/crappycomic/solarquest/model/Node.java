@@ -85,7 +85,7 @@ public class Node implements Comparable<Node>, Serializable
       this.type = type;
    }
    
-   Type getType()
+   public Type getType()
    {
       return type;
    }
