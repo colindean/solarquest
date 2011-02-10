@@ -15,12 +15,11 @@ public class ModelXMLLoader extends DefaultHandler
 {
    /**
     * A {@link Pair} representing the friendly name and ID of an XML file that can be loaded.
-    * 
-    * This class is never serialized.
     */
-   @SuppressWarnings("serial")
    public static class XMLOption extends Pair<String, String>
    {
+      private static final long serialVersionUID = 0;
+
       private XMLOption(String id, String name)
       {
          super(id, name);
