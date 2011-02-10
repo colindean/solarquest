@@ -100,7 +100,6 @@ public class Node implements Comparable<Node>, Serializable
       return startNode;
    }
 
-   // TODO: replace with setDestinations, so we can make the unmodifiableList here
    void addDestination(Node destination)
    {
       destinations.add(destination);
@@ -141,7 +140,6 @@ public class Node implements Comparable<Node>, Serializable
       return owner;
    }
 
-   // TODO: same as above: replace with setRents
    void addRent(int rent)
    {
       if (rents == null)
@@ -155,7 +153,6 @@ public class Node implements Comparable<Node>, Serializable
       return rents == null ? null : Collections.unmodifiableList(rents);
    }
 
-   // TODO: yep
    void addFuel(int fuel)
    {
       if (fuels == null)
@@ -169,7 +166,6 @@ public class Node implements Comparable<Node>, Serializable
       return fuels == null ? null : Collections.unmodifiableList(fuels);
    }
 
-   // TODO: and again
    void addAction(Action action)
    {
       if (actions == null)
@@ -180,7 +176,7 @@ public class Node implements Comparable<Node>, Serializable
 
    public List<Action> getActions()
    {
-      return actions;
+      return actions == null ? null : Collections.unmodifiableList(actions);
    }
    
    @Override
