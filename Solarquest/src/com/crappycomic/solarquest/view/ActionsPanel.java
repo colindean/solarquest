@@ -285,8 +285,11 @@ public class ActionsPanel extends JPanel
       preRollPanel.add(createButton(sellFuelStationNormallyAction));
       preRollPanel.add(Box.createVerticalStrut(GAP));
       preRollPanel.add(createButton(sellNodeNormallyAction));
-      preRollPanel.add(Box.createVerticalStrut(GAP));
-      preRollPanel.add(createButton(fireLasersAction));
+      if (model.isLaserBattleEverAllowed())
+      {
+         preRollPanel.add(Box.createVerticalStrut(GAP));
+         preRollPanel.add(createButton(fireLasersAction));
+      }
       preRollPanel.add(Box.createVerticalGlue());
       preRollPanel.add(rollDiceButton = createButton(rollDiceAction));
 
@@ -319,8 +322,11 @@ public class ActionsPanel extends JPanel
       preLandPanel.add(createButton(tradeAction));
       preLandPanel.add(Box.createVerticalStrut(GAP));
       preLandPanel.add(createButton(negligenceTakeoverAction));
-      preLandPanel.add(Box.createVerticalStrut(GAP));
-      preLandPanel.add(createButton(fireLasersAction));
+      if (model.isLaserBattleEverAllowed())
+      {
+         preLandPanel.add(Box.createVerticalStrut(GAP));
+         preLandPanel.add(createButton(fireLasersAction));
+      }
       preLandPanel.add(Box.createVerticalGlue());
       preLandPanel.add(createButton(preLandContinueButton));
       
