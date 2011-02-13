@@ -182,6 +182,11 @@ public class Node implements Comparable<Node>, Serializable
    @Override
    public String toString()
    {
+      return id;
+   }
+   
+   public String toDebugString()
+   {
       StringBuilder out = new StringBuilder();
 
       out.append(id);

@@ -98,6 +98,8 @@ public class ServerModel extends Model implements Runnable
    
    private boolean purchasedFuelDuringPreRoll;
    
+   private boolean bypassAllowed;
+   
    public void initialize()
    {
       int initialCash = ruleSet.getValue(RuleSet.INITIAL_CASH);
@@ -186,6 +188,22 @@ public class ServerModel extends Model implements Runnable
                   playerAdvancedToOrRemainedOnNode(player, node);
                   
                   if (state == State.PRE_LAND)
+                  {
+                     setState(State.POST_ROLL);
+                  }
+               }
+               else
+               {
+                  sendInvalidModelState(connection);
+               }
+               break;
+            case BYPASS_OR_ROLL_AGAIN:
+               if (bypassAllowed && (state == State.PRE_LAND || state == State.POST_ROLL))
+               {
+                  roll(player, 1, false);
+                  
+                  // Don't send the state if something wacky happened.
+                  if (state == State.PRE_LAND || state == State.POST_ROLL)
                   {
                      setState(State.POST_ROLL);
                   }
@@ -815,7 +833,7 @@ public class ServerModel extends Model implements Runnable
    }
    
    /** if useFuel is false, a Red Shift is impossible */
-   void roll(Player player, int rollMultiplier, boolean allowRedShiftAndUseFuel)
+   void roll(Player player, int rollMultiplier, boolean allowSpecialRollsAndUseFuel)
    {
       Pair<Integer, Integer> roll = rollDice();
       int die1 = roll.getFirst();
@@ -823,25 +841,39 @@ public class ServerModel extends Model implements Runnable
       
       sendMessage(Type.PLAYER_ROLLED, player, roll);
       
-      if (allowRedShiftAndUseFuel && RuleSet.isRedShift(ruleSet.getValue(RuleSet.RED_SHIFT_ROLL), ruleSet.getValue(RuleSet.DIE_PIPS), die1, die2))
+      if (allowSpecialRollsAndUseFuel)
       {
-         Card card = getNextCard();
-         
-         sendMessage(Type.PLAYER_DREW_CARD, player, card);
-         
-         for (Action action : card.getActions())
+         if (RuleSet.isRedShift(ruleSet.getValue(RuleSet.RED_SHIFT_ROLL), ruleSet.getValue(RuleSet.DIE_PIPS), die1, die2))
          {
-            action.perform(this, player);
+            Card card = getNextCard();
             
-            // Break out if player lost the game due to the Red Shift
-            if (player.isGameOver())
-               break;
+            sendMessage(Type.PLAYER_DREW_CARD, player, card);
+            
+            for (Action action : card.getActions())
+            {
+               action.perform(this, player);
+               
+               // Break out if player lost the game due to the Red Shift
+               if (player.isGameOver())
+                  break;
+            }
+            
+            return;
          }
-         
-         return;
+         else if (isBypassEverAllowed() && die1 == die2)
+         {
+            bypassAllowed = true;
+            
+            sendMessage(Type.PLAYER_CAN_BYPASS, player);
+            changePlayerCash(player, ruleSet.getValue(RuleSet.BYPASS_CASH));
+         }
+      }
+      else
+      {
+         bypassAllowed = false;
       }
       
-      boolean useFuel = allowRedShiftAndUseFuel && player.getCurrentNode().usesFuel();
+      boolean useFuel = allowSpecialRollsAndUseFuel && player.getCurrentNode().usesFuel();
       
       Set<Node> allowedMoves;
       int multipledRoll = (die1 + die2) * rollMultiplier;
@@ -953,6 +985,7 @@ public class ServerModel extends Model implements Runnable
       while (players.get(currentPlayer).isGameOver());
       
       purchasedFuelDuringPreRoll = false;
+      
       setState(State.PRE_ROLL);
    }
 
@@ -1043,7 +1076,7 @@ public class ServerModel extends Model implements Runnable
       if (currentDeck.isEmpty())
       {
          currentDeck.addAll(cards);
-         Collections.shuffle(currentDeck);
+         Collections.shuffle(currentDeck, random);
       }
       
       Card card = currentDeck.remove(0);
@@ -1138,7 +1171,7 @@ public class ServerModel extends Model implements Runnable
 
    private boolean isPreLandRequired(Player player, Node node)
    {
-      return isNegligenceTakeoverAllowed(player, node) || isLaserBattleAllowed(player);
+      return isNegligenceTakeoverAllowed(player, node) || isLaserBattleAllowed(player) || bypassAllowed;
    }
    
    @Override

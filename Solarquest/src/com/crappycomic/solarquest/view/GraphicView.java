@@ -385,7 +385,13 @@ public class GraphicView extends View
       boardPanel.updateBoard();
       playersPanel.gameOver(target);
    }
-
+   
+   @Override
+   protected void playerCanBypass(Player player)
+   {
+      statusPanel.appendText(player.getName() + " can bypass and roll again.");
+   }
+   
    @Override
    protected void promptForDebtSettlement(Player debtor, Pair<Player, Integer> debt)
    {

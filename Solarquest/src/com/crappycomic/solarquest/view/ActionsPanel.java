@@ -51,7 +51,7 @@ public class ActionsPanel extends JPanel
    
    private GraphicView view;
    
-   private Model model;
+   private ClientModel model;
    
    private Player currentDebtor;
    
@@ -97,11 +97,15 @@ public class ActionsPanel extends JPanel
    
    private Action negligenceTakeoverAction;
    
+   private Action bypassAction;
+   
    private JLabel postRollLabel;
    
    private Action purchaseNodeAction;
    
    private JButton endTurnButton;
+   
+   private Action endTurnAction;
    
    private JLabel debtSettlementPlayersLabel;
    
@@ -145,7 +149,7 @@ public class ActionsPanel extends JPanel
    
    private JButton chooseNodeCancelButton;
    
-   ActionsPanel(final GraphicView view, final Model model)
+   ActionsPanel(final GraphicView view, final ClientModel model)
    {
       this.view = view;
       this.model = model;
@@ -304,6 +308,17 @@ public class ActionsPanel extends JPanel
          }
       };
       
+      bypassAction = new AbstractAction("Bypass and Roll Again")
+      {
+         private static final long serialVersionUID = 0;
+         
+         @Override
+         public void actionPerformed(ActionEvent evt)
+         {
+            view.sendMessage(Type.BYPASS_OR_ROLL_AGAIN, model.getCurrentPlayer());
+         }
+      };
+      
       Action preLandContinueButton = new AbstractAction("Continue")
       {
          private static final long serialVersionUID = 0;
@@ -327,6 +342,11 @@ public class ActionsPanel extends JPanel
          preLandPanel.add(Box.createVerticalStrut(GAP));
          preLandPanel.add(createButton(fireLasersAction));
       }
+      if (model.isBypassEverAllowed())
+      {
+         preLandPanel.add(Box.createVerticalStrut(GAP));
+         preLandPanel.add(createButton(bypassAction));
+      }
       preLandPanel.add(Box.createVerticalGlue());
       preLandPanel.add(createButton(preLandContinueButton));
       
@@ -341,15 +361,22 @@ public class ActionsPanel extends JPanel
          }
       };
       
-      Action endTurnAction = new AbstractAction("End Turn")
+      endTurnAction = new AbstractAction("End Turn")
       {
          private static final long serialVersionUID = 0;
          
          @Override
          public void actionPerformed(ActionEvent evt)
          {
-            switchPanel(null);
-            view.sendMessage(Type.NO_POST_ROLL, model.getCurrentPlayer());
+            if (model.isBypassAllowed())
+            {
+               view.sendMessage(Type.BYPASS_OR_ROLL_AGAIN, model.getCurrentPlayer());
+            }
+            else
+            {
+               switchPanel(null);
+               view.sendMessage(Type.NO_POST_ROLL, model.getCurrentPlayer());
+            }
          }
       };
       
@@ -678,12 +705,14 @@ public class ActionsPanel extends JPanel
       {
          boolean negligenceTakeoverIsAllowed = model.isNegligenceTakeoverAllowed();
          boolean laserBattleIsAllowed = model.isLaserBattleAllowed();
+         boolean bypassIsAllowed = model.isBypassAllowed();
          
          preLandLabel.setText(getPreLandLabelText(player));
          
          negligenceTakeoverAction.setEnabled(negligenceTakeoverIsAllowed);
          negligenceTakeoverAction.putValue(Action.SHORT_DESCRIPTION, getNegligenceTakeoverActionTooltip(negligenceTakeoverIsAllowed, model.getNodePrice()));
          fireLasersAction.setEnabled(laserBattleIsAllowed);
+         bypassAction.setEnabled(bypassIsAllowed);
          
          switchPanel(preLandPanel);
       }
@@ -709,6 +738,7 @@ public class ActionsPanel extends JPanel
          boolean fuelStationIsSalable = model.isFuelStationSalableNormally();
          boolean nodeIsSalable = model.isNodeSalableNormally();
          boolean fuelIsCritical = model.isFuelCritical();
+         boolean bypassIsAllowed = model.isBypassAllowed();
          int fuelPrice = model.getFuelPrice();
          
          postRollLabel.setText(getPostRollLabelText(player));
@@ -725,6 +755,7 @@ public class ActionsPanel extends JPanel
          sellFuelStationNormallyAction.putValue(Action.SHORT_DESCRIPTION, getSellFuelStationActionTooltip(fuelStationIsSalable, model.getFuelStationPrice()));
          sellNodeNormallyAction.setEnabled(nodeIsSalable);
          endTurnButton.setBackground(fuelIsCritical ? CRITICAL_FUEL_WARNING : null);
+         endTurnAction.putValue(Action.NAME, bypassIsAllowed ? "Roll Again" : "End Turn");
          
          switchPanel(postRollPanel);
       }

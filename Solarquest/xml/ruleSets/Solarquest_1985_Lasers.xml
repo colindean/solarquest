@@ -98,6 +98,10 @@
     <ruleValue>false</ruleValue>
   </rule>
   <rule>
+    <ruleName>bypass_cash</ruleName>
+    <ruleValue>100</ruleValue>
+  </rule>
+  <rule>
     <ruleName>fuel_available_on_unowned_node</ruleName>
     <ruleValue>true</ruleValue>
   </rule>

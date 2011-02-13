@@ -82,6 +82,7 @@ public class RuleSet implements Serializable
    public static final Rule<Boolean> LASERS_CAN_FIRE_AT_START = new Rule<Boolean>("lasers_can_fire_at_start", Boolean.class);
    public static final Rule<RedShiftRoll> RED_SHIFT_ROLL = new Rule<RedShiftRoll>("red_shift_roll", RedShiftRoll.class);
    public static final Rule<Boolean> BYPASS_ALLOWED = new Rule<Boolean>("bypass_allowed", Boolean.class);
+   public static final Rule<Integer> BYPASS_CASH = new Rule<Integer>("bypass_cash", Integer.class);
    public static final Rule<Boolean> FUEL_AVAILABLE_ON_UNOWNED_NODE = new Rule<Boolean>("fuel_available_on_unowned_node", Boolean.class); // false for Apollo 13
    public static final Rule<Boolean> MUST_REFUEL_AT_DEAD_END = new Rule<Boolean>("must_refuel_at_dead_end", Boolean.class); // maybe true for 1985 but not 1988? (Sinope Rule)
 
@@ -114,6 +115,7 @@ public class RuleSet implements Serializable
       ruleNameMap.put(LASERS_CAN_FIRE_AT_START.name, LASERS_CAN_FIRE_AT_START);
       ruleNameMap.put(RED_SHIFT_ROLL.name, RED_SHIFT_ROLL);
       ruleNameMap.put(BYPASS_ALLOWED.name, BYPASS_ALLOWED);
+      ruleNameMap.put(BYPASS_CASH.name, BYPASS_CASH);
       ruleNameMap.put(FUEL_AVAILABLE_ON_UNOWNED_NODE.name, FUEL_AVAILABLE_ON_UNOWNED_NODE);
       ruleNameMap.put(MUST_REFUEL_AT_DEAD_END.name, MUST_REFUEL_AT_DEAD_END);
       

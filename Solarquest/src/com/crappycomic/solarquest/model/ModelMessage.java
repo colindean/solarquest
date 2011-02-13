@@ -35,6 +35,7 @@ public class ModelMessage implements Serializable
       TRADE,
       TRADE_COMPLETED,
       NEGLIGENCE_TAKEOVER,
+      BYPASS_OR_ROLL_AGAIN,
       CHOOSE_NODE_LOST_TO_LEAGUE,
       CHOOSE_NODE_WON_FROM_LEAGUE,
       CHOOSE_NODE_WON_FROM_PLAYER,

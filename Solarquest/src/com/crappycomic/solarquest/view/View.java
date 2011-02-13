@@ -169,6 +169,9 @@ public abstract class View
          case PLAYER_FIRED_LASERS_AND_DESTROYED_A_SHIP:
             playerFiredLasersAndDestroyedAShip(message.getPlayer(), (Player)message.getValue());
             break;
+         case PLAYER_CAN_BYPASS:
+            playerCanBypass(message.getPlayer());
+            break;
       }
       
       lastMessage = message;
@@ -244,6 +247,8 @@ public abstract class View
    protected abstract void playerFiredLasersAndCausedDamage(Player player, Player target);
    
    protected abstract void playerFiredLasersAndDestroyedAShip(Player player, Player target);
+   
+   protected abstract void playerCanBypass(Player player);
    
    protected abstract void promptForPreRollActions();
    

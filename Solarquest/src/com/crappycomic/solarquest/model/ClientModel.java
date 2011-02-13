@@ -24,6 +24,8 @@ public class ClientModel extends Model implements Serializable
    private Player currentPlayer;
    
    private boolean purchasedFuelAtCurrentNode;
+   
+   private boolean bypassAllowed;
 
    public String getDefaultView()
    {
@@ -104,6 +106,12 @@ public class ClientModel extends Model implements Serializable
          case PLAYER_FIRED_LASERS_AND_DESTROYED_A_SHIP:
             playerMap.get(((Player)message.getValue()).getNumber()).setGameOver(true);
             break;
+         case PLAYER_CAN_BYPASS:
+            bypassAllowed = true;
+            break;
+         case PLAYER_ROLLED:
+            bypassAllowed = false;
+            break;
          case MODEL_CHOOSING_NODE_LOST_TO_LEAGUE:
          case MODEL_CHOOSING_NODE_WON_FROM_LEAGUE:
          case MODEL_CHOOSING_NODE_WON_FROM_PLAYER:
@@ -119,7 +127,6 @@ public class ClientModel extends Model implements Serializable
          case PLAYER_LOST_DISPUTE_WITH_LEAGUE:
          case PLAYER_PASSED_START_NODE:
          case PLAYER_REMAINED_STATIONARY:
-         case PLAYER_ROLLED:
          case PLAYER_STARTED_TRADE:
          case PLAYER_WON:
          case PLAYER_WON_DISPUTE_WITH_LEAGUE:
@@ -160,5 +167,10 @@ public class ClientModel extends Model implements Serializable
       return isLaserBattleEverAllowed()
          && !purchasedFuelAtCurrentNode
          && !getLaserTargetablePlayers(player).isEmpty();
+   }
+   
+   public boolean isBypassAllowed()
+   {
+      return bypassAllowed;
    }
 }

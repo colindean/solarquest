@@ -393,6 +393,11 @@ public abstract class Model implements Serializable
          * ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST);
    }
    
+   public boolean isBypassEverAllowed()
+   {
+      return ruleSet.getValue(RuleSet.BYPASS_ALLOWED);
+   }
+   
    public void setRuleSet(RuleSet ruleSet)
    {
       this.ruleSet = ruleSet;

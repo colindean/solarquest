@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE board SYSTEM "../Solarquest.dtd">
-<ruleSet id="Solarquest_1985">
+<!DOCTYPE board SYSTEM "Solarquest_RuleSet.dtd">
+<ruleSet id="Strategic_Solarquest_1985">
   <rule>
     <ruleName>initial_cash</ruleName>
     <ruleValue>1995</ruleValue>
@@ -34,6 +34,10 @@
     <ruleValue>stations</ruleValue>
   </rule>
   <rule>
+    <ruleName>can_place_fuel_stations_on_any_node</ruleName>
+    <ruleValue>true</ruleValue>
+  </rule>
+  <rule>
     <ruleName>node_buyback_availability</ruleName>
     <ruleValue>stations</ruleValue>
   </rule>
@@ -63,7 +67,7 @@
   </rule>
   <rule>
     <ruleName>laser_battles_allowed</ruleName>
-    <ruleValue>false</ruleValue>
+    <ruleValue>true</ruleValue>
   </rule>
   <rule>
     <ruleName>laser_battle_fuel_cost</ruleName>
@@ -74,12 +78,28 @@
     <ruleValue>2</ruleValue>
   </rule>
   <rule>
+    <ruleName>laser_battle_damage_cost</ruleName>
+    <ruleValue>100</ruleValue>
+  </rule>
+  <rule>
+    <ruleName>lasers_can_fire_from_start</ruleName>
+    <ruleValue>false</ruleValue>
+  </rule>
+  <rule>
+    <ruleName>lasers_can_fire_at_start</ruleName>
+    <ruleValue>false</ruleValue>
+  </rule>
+  <rule>
     <ruleName>red_shift_roll</ruleName>
-    <ruleValue>doubles</ruleValue>
+    <ruleValue>max_roll</ruleValue>
   </rule>
   <rule>
     <ruleName>bypass_allowed</ruleName>
     <ruleValue>true</ruleValue>
+  </rule>
+  <rule>
+    <ruleName>bypass_cash</ruleName>
+    <ruleValue>100</ruleValue>
   </rule>
   <rule>
     <ruleName>fuel_available_on_unowned_node</ruleName>
