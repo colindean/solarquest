@@ -4,6 +4,7 @@
 
 package com.crappycomic.solarquest.main;
 
+import java.awt.Color;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
@@ -131,6 +132,8 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
    
    private JComboBox ruleSetBox;
    
+   private RulesDialog rulesDialog;
+   
    private JTextField portField;
    
    private JTextField[] playerNames;
@@ -138,7 +141,7 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
    private PlayerStateBox[] playerStateBoxes;
    
    /** Creates and displays a new instance, initialized to match the given (loaded) serverModel, if passed. */
-   public CreateGameDialog(JFrame owner, final ServerModel serverModel)
+   public CreateGameDialog(final JFrame owner, final ServerModel serverModel)
    {
       super(owner, "Create a Game", true);
       
@@ -146,35 +149,73 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       playerMap = new HashMap<Integer, ServerSideConnection>();
       
       JPanel panel = new JPanel();
-      JLabel label;
-      JButton button;
+      final JButton editButton = new JButton("Edit");
+      JButton startButton;
       
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       
       Box hBox;
-      Box vBox;
       
       hBox = Box.createHorizontalBox();
-      
-      vBox = Box.createVerticalBox();
-      vBox.add(Box.createVerticalGlue());
-      vBox.add(label = new JLabel("Game:"));
-      label.setAlignmentX(1.0f);
-      vBox.add(Box.createVerticalGlue());
-      vBox.add(label = new JLabel("Rule Set:"));
-      label.setAlignmentX(1.0f);
-      vBox.add(Box.createVerticalGlue());
-      hBox.add(vBox);
-      
+      hBox.add(new JLabel("Game:"));
       hBox.add(Box.createHorizontalStrut(GAP));
+      hBox.add(gameBox = serverModel == null ? new JComboBox(ModelXMLLoader.getAvailableGames()) : new JComboBox());
       
-      vBox = Box.createVerticalBox();
-      vBox.add(Box.createVerticalGlue());
-      vBox.add(gameBox = serverModel == null ? new JComboBox(ModelXMLLoader.getAvailableGames()) : new JComboBox());
-      vBox.add(Box.createVerticalStrut(GAP));
-      vBox.add(ruleSetBox = serverModel == null ? new JComboBox(ModelXMLLoader.getAvailableRuleSets()) : new JComboBox());
-      vBox.add(Box.createVerticalGlue());
-      hBox.add(vBox);
+      panel.add(hBox);
+      panel.add(Box.createVerticalStrut(GAP));
+      
+      hBox = Box.createHorizontalBox();
+      hBox.add(new JLabel("Rule Set:"));
+      hBox.add(Box.createHorizontalStrut(GAP));
+      hBox.add(ruleSetBox = serverModel == null ? new JComboBox(ModelXMLLoader.getAvailableRuleSets()) : new JComboBox());
+      hBox.add(Box.createHorizontalStrut(GAP));
+      hBox.add(editButton);
+      
+      ruleSetBox.addItemListener(new ItemListener()
+      {
+         @Override
+         public void itemStateChanged(ItemEvent evt)
+         {
+            rulesDialog = null;
+            editButton.setBackground(null);
+         }
+      });
+      
+      panel.add(hBox);
+      panel.add(Box.createVerticalStrut(GAP));
+      
+      editButton.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent evt)
+         {
+            try
+            {
+               // TODO: this all could be better
+               if (rulesDialog == null)
+               {
+                  rulesDialog = new RulesDialog(owner, getSelectedRuleSet(new ModelXMLLoader()));
+               }
+               else
+               {
+                  rulesDialog.setVisible(true);
+               }
+               
+               if (rulesDialog.isOk())
+               {
+                  editButton.setBackground(Color.YELLOW);
+               }
+               else
+               {
+                  editButton.setBackground(null);
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+            }
+         }
+      });
       
       if (serverModel != null)
       {
@@ -182,9 +223,6 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
          gameBox.setEnabled(false);
          ruleSetBox.setEnabled(false);
       }
-      
-      panel.add(hBox);
-      panel.add(Box.createVerticalStrut(GAP));
       
       hBox = Box.createHorizontalBox();
       hBox.add(new JButton(new NetworkPlayAction()));
@@ -238,10 +276,10 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       
       hBox = Box.createHorizontalBox();
       hBox.add(Box.createHorizontalGlue());
-      hBox.add(button = new JButton("Start"));
+      hBox.add(startButton = new JButton("Start"));
       hBox.add(Box.createHorizontalGlue());
       
-      button.addActionListener(new ActionListener()
+      startButton.addActionListener(new ActionListener()
       {
          @Override
          public void actionPerformed(ActionEvent evt)
@@ -352,7 +390,13 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
          ModelXMLLoader xmlLoader = new ModelXMLLoader();
 
          serverModel = xmlLoader.loadGame(((ModelXMLLoader.XMLOption)gameBox.getSelectedItem()).getID());
-         serverModel.setRuleSet(xmlLoader.loadRuleSet(((ModelXMLLoader.XMLOption)ruleSetBox.getSelectedItem()).getID()));
+         
+         RuleSet ruleSet = rulesDialog == null ? null : rulesDialog.getRuleSet();
+         
+         if (ruleSet == null)
+            serverModel.setRuleSet(getSelectedRuleSet(xmlLoader));
+         else
+            serverModel.setRuleSet(ruleSet);
 
          Collections.shuffle(players);
          serverModel.setPlayers(players);
@@ -373,6 +417,12 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       server.start();
       
       return true;
+   }
+   
+   private RuleSet getSelectedRuleSet(ModelXMLLoader xmlLoader)
+      throws SAXException, IOException
+   {
+      return xmlLoader.loadRuleSet(((ModelXMLLoader.XMLOption)ruleSetBox.getSelectedItem()).getID());
    }
    
    /** Sets up the given player with the appropriate client, creating the player, if necessary. */
