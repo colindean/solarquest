@@ -356,7 +356,13 @@ public abstract class Model implements Serializable
             && !ruleSet.getValue(RuleSet.LASERS_CAN_FIRE_FROM_START))
          return targetablePlayers;
       
-      int maximumDistance = player.getFuel() / ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST) - 1;
+      int laserBattleFuelCost = ruleSet.getValue(RuleSet.LASER_BATTLE_FUEL_COST);
+      int maximumDistance;
+      
+      if (laserBattleFuelCost == 0)
+         maximumDistance = Integer.MAX_VALUE;
+      else
+         maximumDistance = player.getFuel() / laserBattleFuelCost - 1;
       
       maximumDistance = Math.min(maximumDistance, ruleSet.getValue(RuleSet.LASER_BATTLE_MAXIMUM_DISTANCE));
       
