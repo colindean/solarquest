@@ -141,7 +141,6 @@ public class GraphicView extends View
             frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null);
-            frame.setResizable(false);
             frame.setVisible(true);
             
             frame.addWindowListener(new WindowAdapter()

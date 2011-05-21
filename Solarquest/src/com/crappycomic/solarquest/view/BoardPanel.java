@@ -26,8 +26,6 @@ public class BoardPanel extends JPanel
 
    public static final int DEFAULT_HEIGHT = 640;
 
-   private static final double ZOOM_FACTOR = 2.0;
-   
    private static final int NODE_SIZE = 40;
    
    private static final int NODE_BORDER_WIDTH = 4;
@@ -146,6 +144,8 @@ public class BoardPanel extends JPanel
          public void componentResized(ComponentEvent evt)
          {
             adjustScales();
+            center(getPanPoint(), false);
+            repaint();
          }
       });
       
@@ -266,14 +266,16 @@ public class BoardPanel extends JPanel
    {
       if (boardImage != null)
       {
-         // assuming square
          imageWidth = boardImage.getWidth(this);
          imageHeight = boardImage.getHeight(this);
          panelWidth = getWidth();
          panelHeight = getHeight();
          
-         scaleFit = (double)panelWidth / imageWidth;
-         scaleZoomed = ZOOM_FACTOR * scaleFit;
+         double scaleFitX = (double)panelWidth / imageWidth;
+         double scaleFitY = (double)panelHeight / imageHeight;
+         
+         scaleFit = Math.min(scaleFitX, scaleFitY);
+         scaleZoomed = 1;
       }
    }
    
@@ -293,13 +295,28 @@ public class BoardPanel extends JPanel
       {
          Graphics2D g2 = (Graphics2D)g;
          AffineTransform transform = new AffineTransform();
-         double scale = getScale();
-   
+         
          if (zoomed)
+         {
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            
             transform.translate(translateX, translateY);
-         transform.scale(scale, scale);
+         }
+         else
+         {
+            double scale = getScale();
+            
+            g2.setColor(Color.BLACK);
+            g2.fillRect(0, 0, panelWidth, panelHeight);
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            
+            int centerX = (int)((panelWidth - imageWidth * scale) / 2);
+            int centerY = (int)((panelHeight - imageHeight * scale) / 2);
+            
+            transform.translate(centerX, centerY);
+            transform.scale(scale, scale);
+         }
    
-         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
          g2.drawImage(displayImage, transform, this);
       }
    }
