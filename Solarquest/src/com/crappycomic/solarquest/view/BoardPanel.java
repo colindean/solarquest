@@ -74,13 +74,15 @@ public class BoardPanel extends JPanel
    
    private int imageHeight;
    
+   private int imageX;
+   
+   private int imageY;
+   
    private int panelWidth;
    
    private int panelHeight;
    
    private double scaleFit;
-
-   private double scaleZoomed;
 
    private boolean zoomed;
    
@@ -169,8 +171,9 @@ public class BoardPanel extends JPanel
             if (dragged)
                return;
             
-            double x = evt.getX() / getScale() - (zoomed ? translateX : 0);
-            double y = evt.getY() / getScale() - (zoomed ? translateY : 0);
+            double scale = getScale();
+            double x = evt.getX() / scale - (zoomed ? translateX : imageX / scale);
+            double y = evt.getY() / scale - (zoomed ? translateY : imageY / scale);
             double minDistance = Double.MAX_VALUE;
             Node closestNode = null;
             
@@ -275,13 +278,15 @@ public class BoardPanel extends JPanel
          double scaleFitY = (double)panelHeight / imageHeight;
          
          scaleFit = Math.min(scaleFitX, scaleFitY);
-         scaleZoomed = 1;
+         
+         imageX = (int)((panelWidth - imageWidth * scaleFit) / 2);
+         imageY = (int)((panelHeight - imageHeight * scaleFit) / 2);
       }
    }
    
    private double getScale()
    {
-      return zoomed ? scaleZoomed : scaleFit;
+      return zoomed ? 1 : scaleFit;
    }
    
    @Override
@@ -310,10 +315,7 @@ public class BoardPanel extends JPanel
             g2.fillRect(0, 0, panelWidth, panelHeight);
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             
-            int centerX = (int)((panelWidth - imageWidth * scale) / 2);
-            int centerY = (int)((panelHeight - imageHeight * scale) / 2);
-            
-            transform.translate(centerX, centerY);
+            transform.translate(imageX, imageY);
             transform.scale(scale, scale);
          }
    
@@ -323,8 +325,8 @@ public class BoardPanel extends JPanel
    
    private Point clampTranslates(int x, int y)
    {
-      return new Point((int)Math.min(Math.max(x, panelWidth - (imageWidth * scaleZoomed)), 0),
-         (int)Math.min(Math.max(y, panelHeight - (imageHeight * scaleZoomed)), 0));
+      return new Point(Math.min(Math.max(x, panelWidth - imageWidth), 0),
+         Math.min(Math.max(y, panelHeight - imageHeight), 0));
    }
    
    void updateBoard()
