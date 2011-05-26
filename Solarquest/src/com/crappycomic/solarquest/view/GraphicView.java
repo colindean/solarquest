@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Action;
 
@@ -41,6 +42,8 @@ public class GraphicView extends View
    private ActionsPanel actionsPanel;
    
    private NodePanel nodePanel;
+   
+   private TrayIcon trayIcon;
    
    @Override
    protected void initialize()
@@ -158,6 +161,52 @@ public class GraphicView extends View
             
             boardPanel.updateBoard(getNodeCoords(currentNode.getID()), false);
             nodePanel.updateNode(currentNode);
+            
+            boolean remotePlayer = false;
+            
+            for (Player player : model.getPlayers())
+            {
+               remotePlayer |= !isPlayerLocal(player);
+            }
+            
+            if (remotePlayer && SystemTray.isSupported())
+            {
+               try
+               {
+                  Image image = ImageIO.read(getClass().getResourceAsStream("/images/systray.gif"));
+               
+                  trayIcon = new TrayIcon(image, "Solarquest");
+                  trayIcon.setImageAutoSize(true);
+                  
+                  trayIcon.addActionListener(new ActionListener()
+                  {
+                     @Override
+                     public void actionPerformed(ActionEvent evt)
+                     {
+                        frame.toFront();
+                     }
+                  });
+                  
+                  trayIcon.addMouseListener(new MouseAdapter()
+                  {
+                     @Override
+                     public void mouseClicked(MouseEvent evt)
+                     {
+                        frame.toFront();
+                     }
+                  });
+                  
+                  SystemTray.getSystemTray().add(trayIcon);
+               }
+               catch (IOException ioe)
+               {
+                  System.err.println("Failed to load systray icon. Forget it.");
+               }
+               catch (AWTException awte)
+               {
+                  // Wouldn't make sense because we called isSupported() first.
+               }
+            }
          }
       });
    }
@@ -412,11 +461,18 @@ public class GraphicView extends View
    @Override
    protected void promptForPreRollActions()
    {
-      Node node = model.getCurrentPlayer().getCurrentNode();
+      Player player = model.getCurrentPlayer();
+      Node node = player.getCurrentNode();
       
       centerOnNode(node);
       actionsPanel.showPreRollActions();
       nodePanel.updateNode(node);
+      
+      if (trayIcon != null && !frame.isActive() && isPlayerLocal(player))
+      {
+         trayIcon.displayMessage("Waiting for " + player.getName(),
+            "Click this balloon to bring Solarquest to the foreground.", TrayIcon.MessageType.INFO);
+      }
    }
 
    @Override
