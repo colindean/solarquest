@@ -155,20 +155,17 @@ public class Player implements Serializable
    {
       return groupCounts.get(group);
    }
-
-   public void replace(Player player)
-   {
-      cash = player.cash;
-      currentNode = player.currentNode;
-      fuel = player.fuel;
-      fuelStations = player.fuelStations;
-      gameOver = player.gameOver;
-      groupCounts = player.groupCounts;
-      ownedNodes = player.ownedNodes;
-      
-      System.out.println("Current node: " + currentNode.getID());
-   }
    
+   void fixGroupCounts()
+   {
+      groupCounts.clear();
+      
+      for (Node node : getOwnedNodes())
+      {
+         incrementGroupCount(node.getGroup());
+      }
+   }
+
    @Override
    public String toString()
    {

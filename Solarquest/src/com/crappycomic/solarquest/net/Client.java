@@ -42,6 +42,7 @@ public class Client
    
    void setModel(ClientModel model)
    {
+      model.fixOwnedNodes();
       this.model = model;
       view.setModel(model);
       model.setView(view);

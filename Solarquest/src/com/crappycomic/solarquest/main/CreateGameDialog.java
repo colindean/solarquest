@@ -403,6 +403,10 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
          
          serverModel.initialize();
       }
+      else
+      {
+         serverModel.fixOwnedNodes();
+      }
 
       serverModel.setServer(server);
       server.setModel(serverModel);

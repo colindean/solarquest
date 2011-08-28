@@ -418,4 +418,22 @@ public abstract class Model implements Serializable
    {
       this.board = board;
    }
+
+   public void fixOwnedNodes()
+   {
+      for (Node node : board.getNodes())
+      {
+         Player player = node.getOwner();
+         
+         if (player != null)
+         {
+            player.addNode(node);
+         }
+      }
+      
+      for (Player player : players)
+      {
+         player.fixGroupCounts();
+      }
+   }
 }
