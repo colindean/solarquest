@@ -53,7 +53,7 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
    /** Handles the "Enable/Disable Network Play" button functionality. */
    private class NetworkPlayAction extends AbstractAction
    {
-      boolean enabled;
+      boolean networkPlayEnabled;
       
       private NetworkPlayAction()
       {
@@ -64,13 +64,13 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
       
       private String getName()
       {
-         return enabled ? "Disable Network Play" : "Enable Network Play";
+         return networkPlayEnabled ? "Disable Network Play" : "Enable Network Play";
       }
       
       @Override
       public void actionPerformed(ActionEvent evt)
       {
-         if (enabled)
+         if (networkPlayEnabled)
          {
             server.stopListeningForDirectConnections();
          }
@@ -98,7 +98,7 @@ public class CreateGameDialog extends JDialog implements Server.HandshakeObserve
             }
          }
          
-         enabled = !enabled;
+         networkPlayEnabled = !networkPlayEnabled;
          putValue(Action.NAME, getName());
       }
    }
