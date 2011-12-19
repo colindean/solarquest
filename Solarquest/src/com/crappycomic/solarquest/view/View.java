@@ -322,12 +322,12 @@ public abstract class View
       this.serverModel = serverModel;
    }
    
-   boolean canSave()
+   protected boolean canSave()
    {
       return serverModel != null;
    }
    
-   void save(File file) throws IOException
+   protected void save(File file) throws IOException
    {
       ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
       
