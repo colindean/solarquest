@@ -73,14 +73,14 @@ public class GraphicView extends View
             menuBar.add(menu = new JMenu("File"));
             menu.setMnemonic('F');
             
-            menu.add(new JMenuItem(action = new AbstractAction("Save and Quit")
+            menu.add(new JMenuItem(action = new AbstractAction("Save")
             {
                private static final long serialVersionUID = 0;
                
                @Override
                public void actionPerformed(ActionEvent evt)
                {
-                  saveAndQuit();
+                  save();
                }
             }));
             action.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
@@ -621,7 +621,7 @@ public class GraphicView extends View
       statusPanel.appendText(player.getName() + " obtained a free fuel station.");
    }
    
-   private void saveAndQuit()
+   private void save()
    {
       JFileChooser fileChooser = new JFileChooser();
       
@@ -642,7 +642,6 @@ public class GraphicView extends View
       try
       {
          save(file);
-         quit();
       }
       catch (IOException ioe)
       {
