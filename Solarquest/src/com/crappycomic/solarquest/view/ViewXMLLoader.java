@@ -12,7 +12,7 @@ import org.xml.sax.helpers.*;
 
 public class ViewXMLLoader extends DefaultHandler
 {
-   private static enum State
+   private enum State
    {
       BOARD_IMAGE,
       NODE_VIEW,

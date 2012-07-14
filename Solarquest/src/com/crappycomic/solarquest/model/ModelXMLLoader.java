@@ -43,7 +43,7 @@ public class ModelXMLLoader extends DefaultHandler
    }
    
    /** Enumerates the possible states the loader can be in over the course of loading a file. */
-   private static enum State
+   private enum State
    {
       RULE_SET,
       RULE,

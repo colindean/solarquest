@@ -12,7 +12,7 @@ public class ViewMessage implements Serializable
 {
    private static final long serialVersionUID = 4768863093404077072L;
 
-   public static enum Type
+   public enum Type
    {
       MODEL_PRE_ROLL,
       MODEL_PRE_LAND,

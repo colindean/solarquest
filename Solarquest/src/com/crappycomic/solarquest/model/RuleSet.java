@@ -12,7 +12,7 @@ public class RuleSet implements Serializable
 {
    private static final long serialVersionUID = 8303657986331898582L;
    
-   public static enum RuleType
+   public enum RuleType
    {
       BOOLEAN,
       INTEGER,
@@ -52,14 +52,14 @@ public class RuleSet implements Serializable
       }
    }
    
-   public static enum RedShiftRoll
+   public enum RedShiftRoll
    {
       DOUBLES,
       MAX_ROLL,
       THIRTEEN
    }
    
-   public static enum TransactionAvailability
+   public enum TransactionAvailability
    {
       NOWHERE,
       STATIONS,

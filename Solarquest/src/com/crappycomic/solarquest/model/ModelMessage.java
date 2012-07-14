@@ -14,7 +14,7 @@ public class ModelMessage implements Serializable
    private static final long serialVersionUID = 672249984093234004L;
 
    /** Enumerates the possible actions that a {@link Player} may take. */
-   public static enum Type
+   public enum Type
    {
       NO_PRE_ROLL,
       NO_PRE_LAND,

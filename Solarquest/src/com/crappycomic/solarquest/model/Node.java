@@ -13,7 +13,7 @@ public class Node implements Comparable<Node>, Serializable
    private static final long serialVersionUID = -6994474778709552608L;
 
    /** Enumerates the possible types of nodes. */
-   public static enum Type
+   public enum Type
    {
       SPACE,
       WELL_ORBIT,
