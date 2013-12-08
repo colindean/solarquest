@@ -407,12 +407,9 @@ public class BoardPanel extends JPanel
          Point nodeCenter = view.getNodeCoords(playersAtNode.getKey().getID());
          int players = playersAtNode.getValue().size();
          
-         for (int player = 0; player < playersAtNode.getValue().size(); player++)
+         for (int player = 0; player < players; player++)
          {
-            double theta = getTheta(player, players);
-            Point2D.Double playerCenter = playersAtNode.getValue().size() == 1
-               ? new Point2D.Double(nodeCenter.x, nodeCenter.y)
-               : new Point2D.Double(nodeCenter.x + PlayerToken.SIZE * cos(theta), nodeCenter.y + PlayerToken.SIZE * -sin(theta));
+            Point2D.Double playerCenter = getPlayerCenter(nodeCenter, player, players);
             int x = (int)(playerCenter.x - PlayerToken.SIZE / 2);
             int y = (int)(playerCenter.y - PlayerToken.SIZE / 2);
             
@@ -427,9 +424,23 @@ public class BoardPanel extends JPanel
       center(center, panSmoothly);
    }
    
-   private double getTheta(int player, int players)
+   /**
+    * Returns a point near the given node such that the given player will touch every other player at that node.
+    */
+   private Point2D.Double getPlayerCenter(Point nodeCenter, int player, int players)
    {
-      return 2 * PI * player / players + THETA_PHASE;
+      if (players == 1)
+      {
+         return new Point2D.Double(nodeCenter.x, nodeCenter.y);
+      }
+      else
+      {
+         double radius = PlayerToken.SIZE / sin(PI / players) / 2;
+         double theta = 2 * PI * player / players + THETA_PHASE;
+         
+         return new Point2D.Double(nodeCenter.x + radius * cos(theta),
+            nodeCenter.y + radius * -sin(theta));
+      }
    }
    
    // Attempt to make the given point the center of the view
